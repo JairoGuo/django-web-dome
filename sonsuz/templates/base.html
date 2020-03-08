@@ -1,0 +1,211 @@
+{% load static i18n compress %}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>{% block title %}sonsuz{% endblock title %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+
+    <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}">
+
+    {% block css %}
+
+        <!-- Latest compiled and minified Bootstrap CSS -->
+        {#    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">#}
+        <link href="{% static 'bootstrap/css/bootstrap.css' %}" rel="stylesheet">
+        <link href="{% static 'semantic/semantic.css' %}" rel="stylesheet">
+
+
+        <!-- Your stuff: Third-party CSS libraries go here -->
+        {% compress css %}
+            <!-- This file stores project-specific CSS -->
+
+            <link href="{% static 'css/project.css' %}" rel="stylesheet">
+            <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+        {% endcompress %}
+    {% endblock %}
+
+
+</head>
+
+<body>
+<div class="ui large top fixed hidden menu">
+  <div class="ui container">
+    <a class="active item">Home</a>
+    <a class="item">Work</a>
+    <a class="item">Company</a>
+    <a class="item">Careers</a>
+    <div class="right menu">
+      <div class="item">
+        <a class="ui button">Log in</a>
+      </div>
+      <div class="item">
+        <a class="ui primary button">Sign Up</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ui vertical inverted sidebar menu">
+    <a class="active item">Home</a>
+    <a class="item">Work</a>
+    <a class="item">Company</a>
+    <a class="item">Careers</a>
+    <a class="item">Login</a>
+    <a class="item">Signup</a>
+</div>
+
+
+<div class="ui inverted vertical center aligned segment">
+
+    <div class="ui fluid container">
+        <div class="ui large secondary inverted pointing menu">
+            <a class="toc item">
+                <i class="sidebar icon"></i>
+            </a>
+
+{#            <a class="item" href="{% url 'home' %}">sonsuz</a>#}
+            <a class="item" id="home" href="{% url 'home' %}">Home </a>
+            <a class="item" id="about" href="{% url 'about' %}">关于 </a>
+
+{#            <a class="item" id="news" href="{% url 'news' %}">新闻动态</a>#}
+{#            <a class="item" id="blogs" href="{% url 'blogs' %}">博客文章</a>#}
+{#            <a class="item" id="quora" href="{% url 'quora' %}">有问有答</a>#}
+{#            <a class="item" id="chat" href="{% url 'chat' %}">在线畅聊</a>#}
+
+
+            {% if request.user.is_authenticated %}
+
+                {# URL provided by django-allauth/account/urls.py #}
+                <div class="right item">
+                    <a class="ui inverted button"
+                       href="{% url 'users:detail' request.user.username %}">{% trans "My Profile" %}</a>
+{#                    &ThickSpace;#}
+                    <a class="ui inverted button"
+                       href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>
+                </div>
+
+            {% else %}
+
+                {# URL provided by django-allauth/account/urls.py #}
+                <div class="right item">
+                    <a class="ui inverted button"
+                       href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
+{#                    &ThickSpace;#}
+                    <a class="ui inverted button"
+                       href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
+                </div>
+
+
+            {% endif %}
+
+
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+<div class="container">
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% block content %}
+        <p>Use this document as a way to quick start any new project.</p>
+    {% endblock content %}
+
+</div> <!-- /container -->
+
+{% block modal %}{% endblock modal %}
+
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+{% block javascript %}
+
+    <!-- Bootstrap JS and its dependencies-->
+{#    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"#}
+{#            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"#}
+{#            crossorigin="anonymous"></script>#}
+    {#      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>#}
+    {#      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>#}
+    <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+    <script src="{% static 'js/popper.js' %}"></script>
+    <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'semantic/semantic.js' %}"></script>
+
+    <!-- Your stuff: Third-party javascript libraries go here -->
+
+
+    <!-- place project specific Javascript in this file -->
+    {% compress js %}
+        <script src="{% static 'js/project.js' %}"></script>
+
+
+        <script>
+        $(document).ready(function () {
+
+                // fix menu when passed
+                $('.masthead')
+                    .visibility({
+                        once: false,
+                        onBottomPassed: function () {
+                            $('.fixed.menu').transition('fade in');
+                        },
+                        onBottomPassedReverse: function () {
+                            $('.fixed.menu').transition('fade out');
+                        }
+                    })
+                    ;
+
+                    // create sidebar and attach to menu open
+                    $('.ui.sidebar')
+                            .sidebar('attach events', '.toc.item')
+                    ;
+
+                })
+        ;
+    </script>
+        <script>
+        $(function () {
+            let flags = ['news', 'about', 'blogs', 'quora', 'chat'];
+            let href = window.location.href;
+            let isHome = true;
+            flags.forEach(function (item) {
+                if (href.indexOf(item) !== -1) {
+                    $('#' + item).addClass('active');
+                    isHome = false
+                } else {
+                    $('#' + item).removeClass('active')
+                }
+            });
+            if (isHome) {
+                $('#home').addClass('active');
+            }
+        })
+    </script>
+    {% endcompress %}
+
+{% endblock javascript %}
+</body>
+</html>
+
