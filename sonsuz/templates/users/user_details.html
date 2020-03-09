@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}User: {{ object.username }}{% endblock %}
+
+{% block content %}
+
+
+    <div class="ui container">
+
+
+        <h1 class="ui header">个人资料</h1>
+        <div class="ui divider"></div>
+        <div class="ui three column grid stackable container">
+            <div class="row">
+                <div class="column" style="height: 150px; width: 150px; margin: 0; padding: 0;">
+                    {% if user.avatar %}
+                        <img class="ui medium circular image" src="{{ MEDIA_URL }}{{ user.avatar }}"
+                             style="height: 150px; width: 150px;">
+
+                    {% else %}
+                        <img class="ui medium circular image" src="{% static "images/user.png" %}"
+                             style="height: 150px; width: 150px;">
+                    {% endif %}
+
+                </div>
+
+
+                <div class="column">
+                    <div class="ui grid container">
+                        <div class="row">
+
+                            <p class="ui header" style="color: #999999"><span>ID:</span>{{ object.username }}</p>
+
+
+                        </div>
+                        <div class="row">
+
+                            {% if object.name == None %}
+                                <p><span>昵称：</span>{{ object.username }}</p>
+                            {% else %}
+                                <p><span>昵称：</span>{{ object.name }}</p>
+                            {% endif %}
+
+                        </div>
+                        <div class="row">
+                            {% if object.job %}
+                                <span>职业：</span><p>{{ object.job }}</p>
+                            {% else %}
+                                <span>职业：</span><p>未填写职业信息</p>
+                            {% endif %}
+                        </div>
+                        <div class="row">
+                            {% if object.website_url %}
+                                <span>个人网站：</span><a href="{{ object.website_url }}">{{ object.website_url }}</a>
+                            {% else %}
+                                <span>个人网站：</span><p>未填写个人网站</p>
+                            {% endif %}
+                        </div>
+                        <div class="row">
+                            <h3>
+                                {% if object.github %}
+                                    <a class="ui circular github icon button" href="{{ object.github }}">
+                                        <i class="github icon"></i>
+                                    </a>
+                                {% endif %}
+                                {% if object.linkedin %}
+                                    <a class="ui circular linkedin icon button" href="{{ object.linkedin }}">
+                                        <i class="linkedin icon"></i>
+                                    </a>
+                                {% endif %}
+                                {% if object.weibo %}
+                                    <a class="ui circular weibo icon button" href="{{ object.weibo }}">
+                                        <i class="weibo icon"></i>
+                                    </a>
+                                {% endif %}
+                                {% if object.zhihu %}
+                                    <a class="ui circular  icon button" href="{{ object.zhihu }}">
+                                        <img class="icon" src="{{ STATIC_URL }}images/zh.jpg" alt="">
+                                    </a>
+                                {% endif %}
+
+                            </h3>
+
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="column">
+                    <a href=""><i class="linkify icon"></i>个人主页</a>
+                </div>
+
+            </div>
+
+
+            <div class="two column row">
+                <div class="two column">
+                    <div class="ui card fluid" style="height: 150px;">
+                        <div class="content">
+                            <div class="header">介绍</div>
+                            <div class="meta"></div>
+                            <div class="description">
+                                {{ user.introduction|safe|truncatechars:80 }}
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="column">
+                {% if object == request.user %}
+                    <!-- Action buttons -->
+                    <div class="two column row">
+                        <div class="column">
+
+                        </div>
+
+                        <div class="column">
+                            <a class="btn btn-primary" href="{% url 'users:update' %}" role="button">编辑个人信息</a>
+                            <a class="btn btn-primary" href="{% url 'account_email' %}" role="button">编辑邮箱</a>
+                        </div>
+
+
+                    </div>
+                    <!-- End Action buttons -->
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+
+
+{% endblock content %}
+

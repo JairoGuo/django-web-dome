@@ -8,11 +8,12 @@ from django.utils.translation import ugettext_lazy as _
 User = get_user_model()
 
 
-class UserDetailView(LoginRequiredMixin, DetailView):
+class UserDetailView(LoginRequiredMixin, DetailView): # 用户详细视图
 
     model = User
     slug_field = "username"
     slug_url_kwarg = "username"
+    template_name = "users/user_details.html"
 
 
 user_detail_view = UserDetailView.as_view()
@@ -21,7 +22,8 @@ user_detail_view = UserDetailView.as_view()
 class UserUpdateView(LoginRequiredMixin, UpdateView):
 
     model = User
-    fields = ["name"]
+    fields = ["name", "job", "introduction", "avatar", "address", "birthday",
+              "website_url", "weibo", "zhihu", "github", "linkedin"]
 
     def get_success_url(self):
         return reverse("users:detail", kwargs={"username": self.request.user.username})

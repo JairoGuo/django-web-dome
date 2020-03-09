@@ -1,4 +1,5 @@
-{% load static i18n compress %}<!DOCTYPE html>
+{% load static i18n compress thumbnail %}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -37,104 +38,111 @@
 </head>
 
 <body>
-<div class="ui large top fixed hidden menu">
-  <div class="ui container">
-    <a class="active item">Home</a>
-    <a class="item">Work</a>
-    <a class="item">Company</a>
-    <a class="item">Careers</a>
-    <div class="right menu">
-      <div class="item">
-        <a class="ui button">Log in</a>
-      </div>
-      <div class="item">
-        <a class="ui primary button">Sign Up</a>
-      </div>
-    </div>
-  </div>
+
+
+<div class="ui vertical inverted sidebar menu">  {# 手机端适应 #}
+    <a class="item" id="mhome" href="{% url 'home' %}">Home </a>
+    <a class="item" id="mabout" href="{% url 'about' %}">关于 </a>
+    <a class="item" id="mnews" href="{% url 'news' %}">新闻动态</a>
+    <a class="item" id="mblogs" href="{% url 'blogs' %}">博客文章</a>
+    <a class="item" id="mquora" href="{% url 'quora' %}">有问有答</a>
+    <a class="item" id="mchat" href="{% url 'chat' %}">在线畅聊</a>
 </div>
 
-<div class="ui vertical inverted sidebar menu">
-    <a class="active item">Home</a>
-    <a class="item">Work</a>
-    <a class="item">Company</a>
-    <a class="item">Careers</a>
-    <a class="item">Login</a>
-    <a class="item">Signup</a>
-</div>
+<div class="pusher">
 
+    <div class="ui inverted vertical center aligned segment">
 
-<div class="ui inverted vertical center aligned segment">
+        <div class="ui container ">
+            <div class="ui large secondary inverted pointing  menu ">
+                <a class="toc item">
+                    <i class="sidebar icon"></i>
+                </a>
 
-    <div class="ui fluid container">
-        <div class="ui large secondary inverted pointing menu">
-            <a class="toc item">
-                <i class="sidebar icon"></i>
-            </a>
-
-{#            <a class="item" href="{% url 'home' %}">sonsuz</a>#}
-            <a class="item" id="home" href="{% url 'home' %}">Home </a>
-            <a class="item" id="about" href="{% url 'about' %}">关于 </a>
-
-{#            <a class="item" id="news" href="{% url 'news' %}">新闻动态</a>#}
-{#            <a class="item" id="blogs" href="{% url 'blogs' %}">博客文章</a>#}
-{#            <a class="item" id="quora" href="{% url 'quora' %}">有问有答</a>#}
-{#            <a class="item" id="chat" href="{% url 'chat' %}">在线畅聊</a>#}
-
-
-            {% if request.user.is_authenticated %}
-
-                {# URL provided by django-allauth/account/urls.py #}
+                {#            <a class="item" href="{% url 'home' %}">sonsuz</a>#}
+                <a class="item" id="home" href="{% url 'home' %}">Home </a>
+                <a class="item" id="about" href="{% url 'about' %}">关于 </a>
+                <a class="item" id="news" href="{% url 'news' %}">新闻动态</a>
+                <a class="item" id="blogs" href="{% url 'blogs' %}">博客文章</a>
+                <a class="item" id="quora" href="{% url 'quora' %}">有问有答</a>
+                <a class="item" id="chat" href="{% url 'chat' %}">在线畅聊</a>
                 <div class="right item">
-                    <a class="ui inverted button"
-                       href="{% url 'users:detail' request.user.username %}">{% trans "My Profile" %}</a>
-{#                    &ThickSpace;#}
-                    <a class="ui inverted button"
-                       href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>
+
+
+                    {% if request.user.is_authenticated %}
+                        <div class=" ui dropdown userdropdown">
+                            {% thumbnail request.user.avatar "x25" as im %}
+                                <img class="ui avatar image" src="{{ im.url }}">
+                            {% empty %}
+                                <img class="ui avatar image" src="{% static "images/user.png" %}">
+                            {% endthumbnail %}
+
+                            <div class="menu">
+                                <a class="item" href="{% url 'users:detail' request.user.username %}"><i class="user icon"></i>个人中心</a>
+                                <a class="ui divider"></a>
+                                <a class="item"><i class="question circle icon"></i>帮助</a>
+                                <a class="item" href="{% url 'account_logout' %}"><i class="sign-out icon"></i>{% trans "Sign Out" %}</a>
+                            </div>
+                        </div>
+
+                    {% else %}
+                        {# URL provided by django-allauth/account/urls.py #}
+                        <a class="ui inverted button"
+                           href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
+                        &ThickSpace;
+                        <a class="ui inverted button"
+                           href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
+                    {% endif %}
+
+
+
+{#                    {% if request.user.is_authenticated %}#}
+{##}
+{#                        URL provided by django-allauth/account/urls.py#}
+{#                        <a class="ui inverted"#}
+{#                           href="{% url 'users:detail' request.user.username %}">#}
+{#                            {% thumbnail request.user.avatar "x25" as im %}#}
+{#                                <img class="ui avatar image" src="{{ im.url }}">#}
+{#                            {% empty %}#}
+{#                                <img class="ui avatar image" src="{% static "images/user.png" %}">#}
+{##}
+{#                            {% endthumbnail %}#}
+{##}
+{#                        </a>#}
+{#                        &ThickSpace;#}
+{#                        <a class="ui inverted button"#}
+{#                           href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>#}
+{#                    {% else %}#}
+{#                        URL provided by django-allauth/account/urls.py#}
+{#                        <a class="ui inverted button"#}
+{#                           href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>#}
+{#                        &ThickSpace;#}
+{#                        <a class="ui inverted button"#}
+{#                           href="{% url 'account_login' %}">{% trans "Sign In" %}</a>#}
+{#                    {% endif %}#}
                 </div>
-
-            {% else %}
-
-                {# URL provided by django-allauth/account/urls.py #}
-                <div class="right item">
-                    <a class="ui inverted button"
-                       href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
-{#                    &ThickSpace;#}
-                    <a class="ui inverted button"
-                       href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
-                </div>
-
-
-            {% endif %}
-
-
-        </div>
-    </div>
-
-</div>
-
-
-
-
-
-
-<div class="container">
-
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
             </div>
-        {% endfor %}
-    {% endif %}
+        </div>
 
-    {% block content %}
-        <p>Use this document as a way to quick start any new project.</p>
-    {% endblock content %}
+    </div>
 
-</div> <!-- /container -->
+    <div class="ui container" style="padding-top: 15px">
 
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}
+            <p>Use this document as a way to quick start any new project.</p>
+        {% endblock content %}
+
+    </div> <!-- /container -->
+</div>
 {% block modal %}{% endblock modal %}
 
 <!-- Le javascript
@@ -143,14 +151,16 @@
 {% block javascript %}
 
     <!-- Bootstrap JS and its dependencies-->
-{#    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"#}
-{#            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"#}
-{#            crossorigin="anonymous"></script>#}
-    {#      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>#}
+    {#    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"#}
+    {#            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"#}
+    {#            crossorigin="anonymous"></script>#}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
     {#      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>#}
-    <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
-    <script src="{% static 'js/popper.js' %}"></script>
     <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    {#    <script src="{% static 'js/popper.js' %}"></script>#}
+    <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
     <script src="{% static 'semantic/semantic.js' %}"></script>
 
     <!-- Your stuff: Third-party javascript libraries go here -->
@@ -160,49 +170,61 @@
     {% compress js %}
         <script src="{% static 'js/project.js' %}"></script>
 
+        <script>
+
+            $('.userdropdown').dropdown({
+                on: 'hover',
+                transition: 'drop'
+            });
+        </script>
+
 
         <script>
-        $(document).ready(function () {
-
+            $(document).ready(function () {
                 // fix menu when passed
                 $('.masthead')
-                    .visibility({
-                        once: false,
-                        onBottomPassed: function () {
-                            $('.fixed.menu').transition('fade in');
-                        },
-                        onBottomPassedReverse: function () {
-                            $('.fixed.menu').transition('fade out');
-                        }
-                    })
-                    ;
+                        .visibility({
+                            once: false,
+                            onBottomPassed: function () {
+                                $('.fixed.menu').transition('fade in');
+                            },
+                            onBottomPassedReverse: function () {
+                                $('.fixed.menu').transition('fade out');
+                            }
+                        });
 
-                    // create sidebar and attach to menu open
-                    $('.ui.sidebar')
-                            .sidebar('attach events', '.toc.item')
-                    ;
-
-                })
-        ;
-    </script>
-        <script>
-        $(function () {
-            let flags = ['news', 'about', 'blogs', 'quora', 'chat'];
-            let href = window.location.href;
-            let isHome = true;
-            flags.forEach(function (item) {
-                if (href.indexOf(item) !== -1) {
-                    $('#' + item).addClass('active');
-                    isHome = false
-                } else {
-                    $('#' + item).removeClass('active')
-                }
+                // create sidebar and attach to menu open
+                $('.ui.sidebar')
+                        .sidebar('attach events', '.toc.item');
             });
-            if (isHome) {
-                $('#home').addClass('active');
-            }
-        })
-    </script>
+        </script>
+        <script>
+            $(function () {
+                let flags = ['news', 'about', 'blogs', 'quora', 'chat'];
+                let href = window.location.href;
+                let isHome = true;
+                flags.forEach(function (item) {
+                    if (href.indexOf(item) !== -1) {
+                        $('#' + item).addClass('active');
+                        $('#m' + item).addClass('active');
+
+                        isHome = false
+                    } else {
+                        $('#' + item).removeClass('active');
+                        $('#m' + item).removeClass('active');
+
+                    }
+                });
+                if (isHome) {
+                    $('#home').addClass('active');
+                    $('#mhome').addClass('active');
+
+                }
+            })
+        </script>
+
+
+
     {% endcompress %}
 
 {% endblock javascript %}
