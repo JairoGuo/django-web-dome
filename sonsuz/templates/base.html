@@ -60,12 +60,20 @@
                 </a>
 
                 {#            <a class="item" href="{% url 'home' %}">sonsuz</a>#}
+{#                <a class="header item" href="{% url 'home' %}">Sonsuz</a>#}
                 <a class="item" id="home" href="{% url 'home' %}">Home </a>
                 <a class="item" id="about" href="{% url 'about' %}">关于 </a>
                 <a class="item" id="news" href="{% url 'news' %}">新闻动态</a>
                 <a class="item" id="blogs" href="{% url 'blogs' %}">博客文章</a>
                 <a class="item" id="quora" href="{% url 'quora' %}">有问有答</a>
                 <a class="item" id="chat" href="{% url 'chat' %}">在线畅聊</a>
+                <div class="ui search item">
+                    <div class="ui icon input">
+                        <input class="prompt" type="text" placeholder="搜索">
+                        <i class="search icon"></i>
+                    </div>
+                    <div class="results"></div>
+                </div>
                 <div class="right item">
 
 
@@ -78,10 +86,19 @@
                             {% endthumbnail %}
 
                             <div class="menu">
-                                <a class="item" href="{% url 'users:detail' request.user.username %}"><i class="user icon"></i>个人中心</a>
-                                <a class="ui divider"></a>
+                                {% if user.name %}
+                                    <div class="header" href="">{{ user.name }}</div>
+
+                                {% else %}
+                                    <div class="header" href="">{{ user.username }}</div>
+                                {% endif %}
+                                <div class="ui divider"></div>
+                                <a class="item" href="{% url 'users:detail' request.user.username %}"><i
+                                        class="user icon"></i>个人中心</a>
+                                <div class="ui divider"></div>
                                 <a class="item"><i class="question circle icon"></i>帮助</a>
-                                <a class="item" href="{% url 'account_logout' %}"><i class="sign-out icon"></i>{% trans "Sign Out" %}</a>
+                                <a class="item" href="{% url 'account_logout' %}"><i
+                                        class="sign-out icon"></i>{% trans "Sign Out" %}</a>
                             </div>
                         </div>
 
@@ -96,30 +113,30 @@
 
 
 
-{#                    {% if request.user.is_authenticated %}#}
-{##}
-{#                        URL provided by django-allauth/account/urls.py#}
-{#                        <a class="ui inverted"#}
-{#                           href="{% url 'users:detail' request.user.username %}">#}
-{#                            {% thumbnail request.user.avatar "x25" as im %}#}
-{#                                <img class="ui avatar image" src="{{ im.url }}">#}
-{#                            {% empty %}#}
-{#                                <img class="ui avatar image" src="{% static "images/user.png" %}">#}
-{##}
-{#                            {% endthumbnail %}#}
-{##}
-{#                        </a>#}
-{#                        &ThickSpace;#}
-{#                        <a class="ui inverted button"#}
-{#                           href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>#}
-{#                    {% else %}#}
-{#                        URL provided by django-allauth/account/urls.py#}
-{#                        <a class="ui inverted button"#}
-{#                           href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>#}
-{#                        &ThickSpace;#}
-{#                        <a class="ui inverted button"#}
-{#                           href="{% url 'account_login' %}">{% trans "Sign In" %}</a>#}
-{#                    {% endif %}#}
+                    {#                    {% if request.user.is_authenticated %}#}
+                    {##}
+                    {#                        URL provided by django-allauth/account/urls.py#}
+                    {#                        <a class="ui inverted"#}
+                    {#                           href="{% url 'users:detail' request.user.username %}">#}
+                    {#                            {% thumbnail request.user.avatar "x25" as im %}#}
+                    {#                                <img class="ui avatar image" src="{{ im.url }}">#}
+                    {#                            {% empty %}#}
+                    {#                                <img class="ui avatar image" src="{% static "images/user.png" %}">#}
+                    {##}
+                    {#                            {% endthumbnail %}#}
+                    {##}
+                    {#                        </a>#}
+                    {#                        &ThickSpace;#}
+                    {#                        <a class="ui inverted button"#}
+                    {#                           href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>#}
+                    {#                    {% else %}#}
+                    {#                        URL provided by django-allauth/account/urls.py#}
+                    {#                        <a class="ui inverted button"#}
+                    {#                           href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>#}
+                    {#                        &ThickSpace;#}
+                    {#                        <a class="ui inverted button"#}
+                    {#                           href="{% url 'account_login' %}">{% trans "Sign In" %}</a>#}
+                    {#                    {% endif %}#}
                 </div>
             </div>
         </div>

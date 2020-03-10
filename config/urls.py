@@ -18,6 +18,10 @@ urlpatterns = [
     # User management
     path("users/", include("sonsuz.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
+
+    # news management
+    path("news/", include("sonsuz.news.urls", namespace="news")),
+
     # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
