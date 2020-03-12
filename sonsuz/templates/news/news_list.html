@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+
+{% block title %}
+    新闻 | {{ block.super }}
+{% endblock %}
+
+
+
+{% block content %}
+
+
+    <div class="ui padded grid container">
+        <div class="eleven wide column ">
+            <div class="ui divided  items newcontent">
+                {% for news in news_list %}
+
+                    {% include "news/news_single.html" with news=news %}
+
+                {% endfor %}
+            </div>
+
+        </div>
+
+        <div class="five wide column fluid container">
+
+            <a class="fluid ui button" onclick="addnews()">发布新闻</a>
+
+            <div class="ui divider"></div>
+            <h1 class="ui header">本周热点</h1>
+            <div class="ui  items">
+                {% for news in news_list %}
+
+                    <div class="item">
+
+                        <div class="content">
+                            <a class="header" href="{% url "news:list" %}">{{ news.title }}</a>
+
+                        </div>
+                    </div>
+
+                {% endfor %}
+            </div>
+        </div>
+
+
+    </div>
+
+
+{% endblock %}
+
+{% block modal %}
+    {% include "news/news_form_modal.html" %}
+
+
+    <div class="ui modal newsview">
+        <div class="header">Header</div>
+        <div class="scrolling content">
+            <p>{{ news.content }}</p>
+        </div>
+    </div>
+
+
+{% endblock modal %}
+
+{% block javascript %}
+
+    {{ block.super }}
+
+    <script src="{% static 'js/news.js' %}" type="text/javascript"></script>
+
+    <script>
+        function f() {
+            $('.newsview')
+                    .modal({
+                        blurring: true
+                    })
+                    .modal('show')
+            ;
+        }
+
+        function addnews() {
+
+            $('.addnews')
+                    .modal('show')
+            ;
+        }
+
+    </script>
+
+
+
+{% endblock javascript %}

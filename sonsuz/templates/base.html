@@ -18,9 +18,7 @@
 
     {% block css %}
 
-        <!-- Latest compiled and minified Bootstrap CSS -->
-        {#    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">#}
-        <link href="{% static 'bootstrap/css/bootstrap.css' %}" rel="stylesheet">
+{#                <link href="{% static 'bootstrap/css/bootstrap.css' %}" rel="stylesheet">#}
         <link href="{% static 'semantic/semantic.css' %}" rel="stylesheet">
 
 
@@ -43,7 +41,7 @@
 <div class="ui vertical inverted sidebar menu">  {# 手机端适应 #}
     <a class="item" id="mhome" href="{% url 'home' %}">Home </a>
     <a class="item" id="mabout" href="{% url 'about' %}">关于 </a>
-    <a class="item" id="mnews" href="{% url 'news' %}">新闻动态</a>
+    <a class="item" id="mnews" href="{% url 'news:list' %}">新闻动态</a>
     <a class="item" id="mblogs" href="{% url 'blogs' %}">博客文章</a>
     <a class="item" id="mquora" href="{% url 'quora' %}">有问有答</a>
     <a class="item" id="mchat" href="{% url 'chat' %}">在线畅聊</a>
@@ -60,10 +58,10 @@
                 </a>
 
                 {#            <a class="item" href="{% url 'home' %}">sonsuz</a>#}
-{#                <a class="header item" href="{% url 'home' %}">Sonsuz</a>#}
+                {#                <a class="header item" href="{% url 'home' %}">Sonsuz</a>#}
                 <a class="item" id="home" href="{% url 'home' %}">Home </a>
                 <a class="item" id="about" href="{% url 'about' %}">关于 </a>
-                <a class="item" id="news" href="{% url 'news' %}">新闻动态</a>
+                <a class="item" id="news" href="{% url 'news:list' %}">新闻动态</a>
                 <a class="item" id="blogs" href="{% url 'blogs' %}">博客文章</a>
                 <a class="item" id="quora" href="{% url 'quora' %}">有问有答</a>
                 <a class="item" id="chat" href="{% url 'chat' %}">在线畅聊</a>
@@ -147,9 +145,20 @@
 
         {% if messages %}
             {% for message in messages %}
-                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                    {{ message }}
+
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="ui success message">
+                    <i class="close icon"></i>
+                    {#                    <div class="header">#}
+                    {#                        你注册成功！#}
+                    {#                    </div>#}
+                    <p>{{ message }}</p>
                 </div>
             {% endfor %}
         {% endif %}
@@ -167,18 +176,10 @@
 <!-- Placed at the end of the document so the pages load faster -->
 {% block javascript %}
 
-    <!-- Bootstrap JS and its dependencies-->
-    {#    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"#}
-    {#            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"#}
-    {#            crossorigin="anonymous"></script>#}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-            crossorigin="anonymous"></script>
-    {#      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>#}
     <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
-    {#    <script src="{% static 'js/popper.js' %}"></script>#}
-    <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
-    <script src="{% static 'semantic/semantic.js' %}"></script>
+    <script src="{% static 'js/popper.js' %}"></script>
+    {#    <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>#}
+    <script src="{% static 'semantic/semantic.min.js' %}"></script>
 
     <!-- Your stuff: Third-party javascript libraries go here -->
 
@@ -186,6 +187,22 @@
     <!-- place project specific Javascript in this file -->
     {% compress js %}
         <script src="{% static 'js/project.js' %}"></script>
+
+        <script>
+            const currentUser = "{{ request.user.username }}";
+        </script>
+
+        <script>
+
+            $('.message .close')
+            .on('click', function() {
+            $(this)
+            .closest('.message')
+            .transition('fade')
+            ;
+            })
+            ;
+        </script>
 
         <script>
 

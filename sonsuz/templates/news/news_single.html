@@ -1,0 +1,28 @@
+{% load static   %}
+
+<div class="item">
+    <div class="image">
+        <img src="{% static "images/news.png" %}" style="border-radius: 15px;">
+    </div>
+    <div class="content">
+        <a class="header " onclick="f()">{{ news.title }}</a>
+        <div class="meta">
+            <span>{{ news.updated_at }}</span>
+        </div>
+        <div class="description">
+
+
+
+            <p>{{ news.content }}</p>
+        </div>
+        <div class="extra">
+            <div class="ui right floated  "><i class="comment icon"></i>{{ news.replies_count }}
+            </div>
+            {#                        <a class="ui right floated"><i class="heart icon"></i>{{ news.likers_count }}</a>#}
+            <a class="middle aligned content ui right floated">
+                <div class="header"><i class="like icon"></i>{{ news.likers_count }}</div>
+            </a>
+
+        </div>
+    </div>
+</div>

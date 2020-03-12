@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% load static   %}
+
+{% block title %}
+    {{ n }}
+{% endblock %}
+
+
+
+{% block content %}
+
+    <div class="ui divided  items">
+        {% for news in news_list %}
+
+            <div class="item">
+
+                <div class="content">
+                    <a class="header" href="{% url "news:list" %}">{{ news.title }}</a>
+                    <div class="meta">
+                        <span></span>
+                    </div>
+                    <div class="description">
+                        <p>{{ news.content }}</p>
+                    </div>
+                    <div class="extra">
+                        <span>{{ news.updated_at }}</span>
+                        <div class="ui right floated  "><i class="comment icon"></i>{{ news.replies_count }}</div>
+{#                        <a class="ui right floated"><i class="heart icon"></i>{{ news.likers_count }}</a>#}
+                        <a class="middle aligned content ui right floated">
+                            <div class="header"><i class="like icon"></i>{{ news.likers_count }}</div>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+
+        {% endfor %}
+    </div>
+
+
+
+
+
+
+{% endblock %}
+
+{% block modal %}{% endblock modal %}

@@ -12,6 +12,7 @@ django-celery-beat==2.0.0  # https://github.com/celery/django-celery-beat
 mysqlclient
 sqlparse
 sorl-thumbnail # 缩略图
+humanize
 
 # Django
 # ------------------------------------------------------------------------------

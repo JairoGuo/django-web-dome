@@ -1,0 +1,18 @@
+<div class="ui modal addnews small" id="newsFormModal" style="padding: 10px;">
+
+    <form class="ui reply form" role="form" method="post" action="#" onsubmit="return false" id="postNewsForm">
+        {% csrf_token %}
+        <div class="field">
+            <div class="ui header">标题</div>
+            <label for="newsTitle"></label>
+            <input id="newsTitle" name="news_title" type="text">
+            <div class="ui divider"></div>
+            <div class="ui header">新闻内容</div>
+            <label for="newsInput"></label>
+            <textarea id="newsInput" name="news_content"></textarea>
+        </div>
+
+    </form>
+    <button type="button" class=" ui blue labeled  icon button" id="postNews" ><i class="icon send"></i>发表</button>
+    <button type="button" class=" ui red  labeled  icon button" id="postClose"><i class="icon close"></i>取消</button>
+</div>
