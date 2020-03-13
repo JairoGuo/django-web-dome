@@ -1,27 +1,28 @@
 {% load static   %}
 
-<div class="item">
+<div class="item" news-id="{{ news.pk }}">
     <div class="image">
         <img src="{% static "images/news.png" %}" style="border-radius: 15px;">
     </div>
     <div class="content">
-        <a class="header " onclick="f()">{{ news.title }}</a>
+        <a class="header news-header" >{{ news.title }}</a>
         <div class="meta">
             <span>{{ news.updated_at }}</span>
         </div>
         <div class="description">
-
-
-
-            <p>{{ news.content }}</p>
+{#            <p id="content-view">{{ news.content }}</p>#}
         </div>
         <div class="extra">
-            <div class="ui right floated  "><i class="comment icon"></i>{{ news.replies_count }}
-            </div>
+            <div class="ui right floated  "><i class="comment icon"></i>{{ news.replies_count }}</div>
             {#                        <a class="ui right floated"><i class="heart icon"></i>{{ news.likers_count }}</a>#}
-            <a class="middle aligned content ui right floated">
-                <div class="header"><i class="like icon"></i>{{ news.likers_count }}</div>
-            </a>
+            <div class="ui right floated likes">
+                {% if request.user in news.get_likers %}
+                    <a class="header" ><i class="heart inline icon"></i><span class="like-count">{{ news.likers_count }}</span></a>
+                {% else %}
+                    <a class="header"><i class="heart outline icon"></i><span class="like-count">{{ news.likers_count }}</span></a>
+
+                {% endif %}
+            </div>
 
         </div>
     </div>

@@ -91,6 +91,9 @@
                                     <div class="header" href="">{{ user.username }}</div>
                                 {% endif %}
                                 <div class="ui divider"></div>
+                                <a class="item" href="{% url "news:news_manage" %}"><i
+                                        class="newspaper icon"></i>新闻管理</a>
+                                <div class="ui divider"></div>
                                 <a class="item" href="{% url 'users:detail' request.user.username %}"><i
                                         class="user icon"></i>个人中心</a>
                                 <div class="ui divider"></div>

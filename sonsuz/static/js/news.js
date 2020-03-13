@@ -1,19 +1,23 @@
 $(function () {
     //从 cookie 里面获取 csrftoken
-    // let csrftoken = getCookie('csrftoken');
+    let csrftoken = getCookie('csrftoken');
     //
-    // // 这个设置会让所有Ajax POST/DELETE请求在其请求头中都携带 X-CSRFToken 信息
-    // $.ajaxSetup({
-    //     beforeSend: function (xhr, settings) {
-    //         if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-    //             xhr.setRequestHeader("X-CSRFToken", csrftoken);
-    //         }
-    //     }
-    // });
+    // 这个设置会让所有Ajax POST/DELETE请求在其请求头中都携带 X-CSRFToken 信息
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
 
     // 默认焦点
     $('#newsFormModal').on('shown.bs.modal', function () {
         $('#newsInput').trigger('focus')
+    });
+
+    $("#postClose").click(function () {
+        $("#newsFormModal").modal("hide");
     });
 
     $("#postNews").click(function () {
@@ -48,34 +52,66 @@ $(function () {
 
     });
 
-    $("#postClose").onclick(function () {
-        $("#newsFormModal").modal("hide");
-    })
 
-    // $("ul.stream").on("click", ".like", function () {
-    //     let li = $(this).closest('li');
-    //     let newsId = $(li).attr("news-id");
-    //     let payload = {
-    //         'newsId': newsId,
-    //         'csrf_token': csrftoken
-    //     };
-    //     $.ajax({
-    //         url: '/news/like/',
-    //         data: payload,
-    //         type: 'POST',
-    //         cache: false,
-    //         success: function (data) {
-    //             $(".like .like-count", li).text(data.likers_count);
-    //             if ($(".like .heart", li).hasClass("fa fa-heart")) {
-    //                 $(".like .heart", li).removeClass("fa fa-heart");
-    //                 $(".like .heart", li).addClass("fa fa-heart-o");
-    //             } else {
-    //                 $(".like .heart", li).removeClass("fa fa-heart-o");
-    //                 $(".like .heart", li).addClass("fa fa-heart");
-    //             }
-    //         }
-    //     });
-    // });
+
+    $("div.newcontent").on("click", ".likes", function () {
+
+        let item = $(this).closest('.item');
+
+        let newsId = $(item).attr("news-id");
+        let payload = {
+            'newsId': newsId,
+            'csrf_token': csrftoken
+        };
+        $.ajax({
+            url: '/news/like/',
+            data: payload,
+            type: 'POST',
+            cache: false,
+            success: function (data) {
+                $(".likes .like-count", item).text(data.likers_count);
+                if ($(".likes .heart", item).hasClass("inline")) {
+                    $(".likes .heart", item).removeClass("inline");
+                    $(".likes .heart", item).addClass("outline");
+                } else {
+                    $(".likes .heart", item).removeClass("outline");
+                    $(".likes .heart", item).addClass("inline");
+                }
+            }
+        });
+    });
+
+    $("div.newcontent").on("click", ".news-header", function () {
+
+        let item = $(this).closest('.item');
+
+        let newsId = $(item).attr("news-id");
+        let payload = {
+            'newsId': newsId,
+            'csrf_token': csrftoken
+        };
+        $('.newsview')
+            .modal({
+                blurring: true
+
+            })
+            .modal('show')
+        ;
+
+        $.ajax({
+            url: '/news/content/',
+            data: payload,
+            type: 'POST',
+            cache: false,
+            success: function (data) {
+                $(".newsview #title").html( data.news_title);
+
+                $(".newsview #newscontent").html(data.news_conent);
+
+            }
+        });
+
+    });
     //
     // $('#replyFormModal').on('show.bs.modal', function (event) {
     //     let button = $(event.relatedTarget); // Button that triggered the modal

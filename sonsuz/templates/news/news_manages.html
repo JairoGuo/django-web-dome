@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+
+{% block title %}
+    新闻管理 | {{ block.super }}
+{% endblock %}
+{% block content %}
+
+    <div class="ui divided  items newcontent">
+        {% for news in news_list %}
+
+            <div class="item">
+                <div class="image">
+                    <img src="{% static "images/news.png" %}" style="border-radius: 15px;">
+                </div>
+                <div class="content">
+                    <a class="header " onclick="f()">{{ news.title }}</a>
+                    <div class="meta">
+                        <span>{{ news.updated_at }}</span>
+                    </div>
+                    <div class="description">
+
+
+{#                        <p>{{ news.content }}</p>#}
+                    </div>
+                    <div class="extra">
+
+                        <a class="ui right floated " href="{% url 'news:delete_news' news.pk %}" type="submit">
+                            <i class="trash icon"></i>删除
+                        </a>
+
+                         <a class="ui right floated  ">
+                            <i class="edit icon"></i>编辑
+                        </a>
+                         <a class="ui right floated  " ">
+                            <i class="eye icon"></i>查看
+                        </a>
+
+
+                    </div>
+                </div>
+            </div>
+
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block modal %}
+    {% include "news/news_form_modal.html" %}
+
+
+    <div class="ui modal newsview">
+        <div class="header">Header</div>
+        <div class="scrolling content">
+            <p>{{ news.content }}</p>
+        </div>
+    </div>
+
+
+{% endblock modal %}
+
+{% block javascript %}
+
+    {{ block.super }}
+
+    <script src="{% static 'js/news.js' %}" type="text/javascript"></script>
+
+    <script>
+        function f() {
+            $('.newsview')
+                    .modal({
+                        blurring: true
+                    })
+                    .modal('show')
+            ;
+        }
+
+        function addnews() {
+
+            $('.addnews')
+                    .modal('show')
+            ;
+        }
+
+    </script>
+
+
+
+{% endblock javascript %}
