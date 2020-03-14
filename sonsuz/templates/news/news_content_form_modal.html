@@ -1,0 +1,101 @@
+<div class="ui modal newsview" style="height: 90%;">
+        <h1 class="header" id="title">aa</h1>
+
+        <div class="scrolling content">
+            <p style="font-size: 20px" class="content" id="newscontent"></p>
+        </div>
+
+
+        {#        <div class="actions">#}
+        {##}
+        {##}
+        {#            <a class="ui right floated "><i class="comment icon"></i>{{ news.replies_count }}</a>#}
+        {##}
+        {#            {% if request.user in news.get_likers %}#}
+        {#                <a class=" ui right floated likes"><i class="heart inline icon"></i><span#}
+        {#                        class="like-count">{{ news.likers_count }}</span></a>#}
+        {#            {% else %}#}
+        {#                <a class=" ui right floated likes"><i class="heart outline icon"></i><span#}
+        {#                        class="like-count">{{ news.likers_count }}</span></a>#}
+        {##}
+        {#            {% endif %}#}
+        {##}
+        {#        </div>#}
+
+        <div class=" content">
+            <div class="ui accordion">
+
+                <div class="title" id="comment">
+                    <i class="dropdown icon"></i>
+                    <span>展开评论</span>
+                </div>
+
+                <div class="content" id="comment-content">
+
+                    <div class="ui comments">
+{#                        <h3 class="ui dividing header">Comments</h3>#}
+                        <div class="comment">
+                            <a class="avatar">
+                                <img src="../static/images/user.png">
+                            </a>
+                            <div class="content">
+                                <a class="author">Matt</a>
+                                <div class="metadata">
+                                    <span class="date">今天下午 5:42</span>
+                                </div>
+                                <div class="text">太赞了！</div>
+                                <div class="actions">
+                                    <a class="reply">Reply</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="comment">
+                            <a class="avatar">
+                                <img src="../static/images/user.png">
+                            </a>
+                            <div class="content">
+                                <a class="author">Elliot Fu</a>
+                                <div class="metadata">
+                                    <span class="date">昨天上午12:30</span>
+                                </div>
+                                <div class="text">
+                                    <p>這對我的研究是非常有用.謝謝!</p>
+                                </div>
+                                <div class="actions">
+                                    <a class="reply">Reply</a>
+                                </div>
+                            </div>
+                            <div class="comments">
+                                <div class="comment">
+                                    <a class="avatar">
+                                        <img src="../static/images/user.png">
+                                    </a>
+                                    <div class="content">
+                                        <a class="author">Jenny Hess</a>
+                                        <div class="metadata">
+                                            <span class="date">刚刚</span>
+                                        </div>
+                                        <div class="text">艾略特你永远是多么正确 :)</div>
+                                        <div class="actions">
+                                            <a class="reply">Reply</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <form class="ui reply form">
+                            <div class="field">
+                                <textarea></textarea>
+                            </div>
+                            <div class="ui blue labeled submit icon button"><i class="icon edit"></i> Add Reply</div>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>

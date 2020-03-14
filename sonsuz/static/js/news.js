@@ -16,10 +16,13 @@ $(function () {
         $('#newsInput').trigger('focus')
     });
 
+
+    // 关闭发布新闻模态框
     $("#postClose").click(function () {
         $("#newsFormModal").modal("hide");
     });
 
+    // 发布新闻
     $("#postNews").click(function () {
         if ($("#newsTitle").val() === '') {
             alert("请输入新闻动态的标题！");
@@ -52,9 +55,14 @@ $(function () {
 
     });
 
-
-
+    //点赞模块
     $("div.newcontent").on("click", ".likes", function () {
+
+        if (currentUser === "") {
+            alert("请登录后再点赞！");
+            return;
+
+        }
 
         let item = $(this).closest('.item');
 
@@ -81,7 +89,16 @@ $(function () {
         });
     });
 
+    //新闻内容
     $("div.newcontent").on("click", ".news-header", function () {
+
+
+        // 每一次查看新闻内容初始展开评论
+
+        if ($("#comment").hasClass("active")) {
+            $("#comment").removeClass("active");
+            $("#comment-content").removeClass("active");
+        }
 
         let item = $(this).closest('.item');
 
@@ -104,7 +121,7 @@ $(function () {
             type: 'POST',
             cache: false,
             success: function (data) {
-                $(".newsview #title").html( data.news_title);
+                $(".newsview #title").html(data.news_title);
 
                 $(".newsview #newscontent").html(data.news_conent);
 
@@ -112,6 +129,8 @@ $(function () {
         });
 
     });
+
+
     //
     // $('#replyFormModal').on('show.bs.modal', function (event) {
     //     let button = $(event.relatedTarget); // Button that triggered the modal
