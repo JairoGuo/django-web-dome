@@ -18,7 +18,7 @@
 
     {% block css %}
 
-{#                <link href="{% static 'bootstrap/css/bootstrap.css' %}" rel="stylesheet">#}
+        {#                <link href="{% static 'bootstrap/css/bootstrap.css' %}" rel="stylesheet">#}
         <link href="{% static 'semantic/semantic.css' %}" rel="stylesheet">
 
 
@@ -37,14 +37,81 @@
 
 <body>
 
+{# 手机端适应 #}
+<div class="ui vertical inverted sidebar menu">
+    <div class="item">
 
-<div class="ui vertical inverted sidebar menu">  {# 手机端适应 #}
+        {% if request.user.is_authenticated %}
+            <div class=" ui dropdown userdropdown">
+                {% thumbnail request.user.avatar "x25" as im %}
+                    <div>
+                        <img class="ui avatar image" src="{{ im.url }}">
+                        {% if user.name %}
+                            <span class="header" href="">{{ user.name }}</span>
+
+                        {% else %}
+                            <span class="header" href="">{{ user.username }}</span>
+                        {% endif %}
+                    </div>
+
+                {% empty %}
+                    <div>
+                        <img class="ui avatar image" src="{% static "images/user.png" %}">
+
+                        {% if user.name %}
+                            <span class="header" href="">{{ user.name }}</span>
+
+                        {% else %}
+                            <span class="header" href="">{{ user.username }}</span>
+                        {% endif %}
+                    </div>
+                {% endthumbnail %}
+
+                <div class="menu">
+                    {#                                {% if user.name %}#}
+                    {#                                    <div class="header" href="">{{ user.name }}</div>#}
+                    {##}
+                    {#                                {% else %}#}
+                    {#                                    <div class="header" href="">{{ user.username }}</div>#}
+                    {#                                {% endif %}#}
+
+                    {#                                <div class="ui divider"></div>#}
+
+                    <a class="item" href="{% url "news:news_manage" %}">
+                        <i class="newspaper icon"></i><span>新闻管理</span>
+                    </a>
+                    <div class="ui divider"></div>
+                    <a class="item" href="{% url 'users:detail' request.user.username %}">
+                        <i class="user icon"></i>个人中心</a>
+                    <div class="ui divider"></div>
+                    <a class="item">
+                        <i class="question circle icon"></i>帮助
+                    </a>
+                    <a class="item" href="{% url 'account_logout' %}">
+                        <i class="sign-out icon"></i>{% trans "Sign Out" %}
+                    </a>
+                </div>
+            </div>
+
+        {% else %}
+            {# URL provided by django-allauth/account/urls.py #}
+            <a class="ui inverted button"
+               href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
+            &ThickSpace;
+            <a class="ui inverted button"
+               href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
+        {% endif %}
+
+    </div>
+
     <a class="item" id="mhome" href="{% url 'home' %}">Home </a>
     <a class="item" id="mabout" href="{% url 'about' %}">关于 </a>
     <a class="item" id="mnews" href="{% url 'news:list' %}">新闻动态</a>
     <a class="item" id="mblogs" href="{% url 'blogs' %}">博客文章</a>
     <a class="item" id="mquora" href="{% url 'quora' %}">有问有答</a>
     <a class="item" id="mchat" href="{% url 'chat' %}">在线畅聊</a>
+
+
 </div>
 
 <div class="pusher">
@@ -72,8 +139,7 @@
                     </div>
                     <div class="results"></div>
                 </div>
-                <div class="right item">
-
+                <div class="right item" id="pc-user-menu">
 
                     {% if request.user.is_authenticated %}
                         <div class=" ui dropdown userdropdown">
@@ -90,16 +156,22 @@
                                 {% else %}
                                     <div class="header" href="">{{ user.username }}</div>
                                 {% endif %}
+
                                 <div class="ui divider"></div>
-                                <a class="item" href="{% url "news:news_manage" %}"><i
-                                        class="newspaper icon"></i>新闻管理</a>
+
+                                <a class="item" href="{% url "news:news_manage" %}">
+                                    <i class="newspaper icon"></i><span>新闻管理</span>
+                                </a>
                                 <div class="ui divider"></div>
-                                <a class="item" href="{% url 'users:detail' request.user.username %}"><i
-                                        class="user icon"></i>个人中心</a>
+                                <a class="item" href="{% url 'users:detail' request.user.username %}">
+                                    <i class="user icon"></i>个人中心</a>
                                 <div class="ui divider"></div>
-                                <a class="item"><i class="question circle icon"></i>帮助</a>
-                                <a class="item" href="{% url 'account_logout' %}"><i
-                                        class="sign-out icon"></i>{% trans "Sign Out" %}</a>
+                                <a class="item">
+                                    <i class="question circle icon"></i>帮助
+                                </a>
+                                <a class="item" href="{% url 'account_logout' %}">
+                                    <i class="sign-out icon"></i>{% trans "Sign Out" %}
+                                </a>
                             </div>
                         </div>
 
@@ -112,32 +184,6 @@
                            href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
                     {% endif %}
 
-
-
-                    {#                    {% if request.user.is_authenticated %}#}
-                    {##}
-                    {#                        URL provided by django-allauth/account/urls.py#}
-                    {#                        <a class="ui inverted"#}
-                    {#                           href="{% url 'users:detail' request.user.username %}">#}
-                    {#                            {% thumbnail request.user.avatar "x25" as im %}#}
-                    {#                                <img class="ui avatar image" src="{{ im.url }}">#}
-                    {#                            {% empty %}#}
-                    {#                                <img class="ui avatar image" src="{% static "images/user.png" %}">#}
-                    {##}
-                    {#                            {% endthumbnail %}#}
-                    {##}
-                    {#                        </a>#}
-                    {#                        &ThickSpace;#}
-                    {#                        <a class="ui inverted button"#}
-                    {#                           href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>#}
-                    {#                    {% else %}#}
-                    {#                        URL provided by django-allauth/account/urls.py#}
-                    {#                        <a class="ui inverted button"#}
-                    {#                           href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>#}
-                    {#                        &ThickSpace;#}
-                    {#                        <a class="ui inverted button"#}
-                    {#                           href="{% url 'account_login' %}">{% trans "Sign In" %}</a>#}
-                    {#                    {% endif %}#}
                 </div>
             </div>
         </div>
@@ -148,13 +194,13 @@
 
         {% if messages %}
             {% for message in messages %}
-{#                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">#}
-{#                    {{ message }}#}
-{##}
-{#                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">#}
-{#                        <span aria-hidden="true">&times;</span>#}
-{#                    </button>#}
-{#                </div>#}
+                {#                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">#}
+                {#                    {{ message }}#}
+                {##}
+                {#                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">#}
+                {#                        <span aria-hidden="true">&times;</span>#}
+                {#                    </button>#}
+                {#                </div>#}
 
                 <div class="ui success message">
                     <i class="close icon"></i>
@@ -180,7 +226,7 @@
 {% block javascript %}
 
     <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
-    <script src="{% static 'js/popper.js' %}"></script>
+{#    <script src="{% static 'js/popper.js' %}"></script>#}
     {#    <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>#}
     <script src="{% static 'semantic/semantic.min.js' %}"></script>
 
@@ -198,12 +244,12 @@
         <script>
 
             $('.message .close')
-            .on('click', function() {
-            $(this)
-            .closest('.message')
-            .transition('fade')
-            ;
-            })
+                    .on('click', function () {
+                        $(this)
+                                .closest('.message')
+                                .transition('fade')
+                        ;
+                    })
             ;
         </script>
 

@@ -65,6 +65,10 @@
   .ui.fixed.menu {
     display: none !important;
   }
+
+   #pc-user-menu {
+       display: none;
+   }
   .secondary.pointing.menu .item,
   .secondary.pointing.menu .menu {
     display: none;

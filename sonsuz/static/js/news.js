@@ -16,7 +16,6 @@ $(function () {
         $('#newsInput').trigger('focus')
     });
 
-
     // 关闭发布新闻模态框
     $("#postClose").click(function () {
         $("#newsFormModal").modal("hide");
@@ -55,7 +54,7 @@ $(function () {
 
     });
 
-    //点赞模块
+    // 新闻列表点赞功能
     $("div.newcontent").on("click", ".likes", function () {
 
         if (currentUser === "") {
@@ -89,9 +88,11 @@ $(function () {
         });
     });
 
-    //新闻内容
-    $("div.newcontent").on("click", ".news-header", function () {
+    var item;
+    var newsId;
 
+    // 显示新闻内容 --------------------------------
+    $("div.newcontent").on("click", ".news-header", function () {
 
         // 每一次查看新闻内容初始展开评论
 
@@ -100,17 +101,16 @@ $(function () {
             $("#comment-content").removeClass("active");
         }
 
-        let item = $(this).closest('.item');
-
-        let newsId = $(item).attr("news-id");
+        item = $(this).closest('.item');
+        newsId = $(item).attr("news-id");
         let payload = {
             'newsId': newsId,
             'csrf_token': csrftoken
         };
+
         $('.newsview')
             .modal({
                 blurring: true
-
             })
             .modal('show')
         ;
@@ -121,17 +121,110 @@ $(function () {
             type: 'POST',
             cache: false,
             success: function (data) {
-                $(".newsview #title").html(data.news_title);
-
-                $(".newsview #newscontent").html(data.news_conent);
+                $(".newsview #title").text(data.news_title);
+                $(".newsview #newscontent").text(data.news_conent);
+                $(".newsview #news-like-count").text(data.news_like_count);
+                $("#news-like").removeClass("inline");
+                $("#news-like").removeClass("outline");
+                $("#news-like").addClass(data.news_like_flag);
 
             }
         });
 
+
+    });
+
+    // 新闻显示内的点赞功能
+    $("#news-conten-like").click(function () {
+
+        if (currentUser === "") {
+            alert("请登录后再点赞！");
+            return;
+
+        }
+        let payload = {
+            'newsId': newsId,
+            'csrf_token': csrftoken
+        };
+        $.ajax({
+            url: '/news/like/',
+            data: payload,
+            type: 'POST',
+            cache: false,
+            success: function (data) {
+
+                $(".likes .like-count", item).text(data.likers_count);
+
+                $("#news-like-count").text(data.likers_count);
+
+                if ($(".likes .heart", item).hasClass("inline")) {
+                    $(".likes .heart", item).removeClass("inline");
+                    $(".likes .heart", item).addClass("outline");
+                } else {
+                    $(".likes .heart", item).removeClass("outline");
+                    $(".likes .heart", item).addClass("inline");
+                }
+
+                if ($("#news-like").hasClass("inline")) {
+                    $("#news-like").removeClass("inline");
+                    $("#news-like").addClass("outline");
+                } else {
+                    $("#news-like").removeClass("outline");
+                    $("#news-like").addClass("inline");
+                }
+            }
+        });
+    });
+
+    // 新闻列表评论
+    $("div.newcontent").on("click", "#news-comment", function () {
+
+        if (currentUser === "") {
+            alert("请登录后再评论！");
+            return;
+        }
+
+        if ($("#comment").hasClass("active")) {
+            $("#comment").removeClass("active");
+            $("#comment-content").removeClass("active");
+        }
+
+        item = $(this).closest('.item');
+        newsId = $(item).attr("news-id");
+        let payload = {
+            'newsId': newsId,
+            'csrf_token': csrftoken
+        };
+
+        $('.newsview')
+            .modal({
+                blurring: true
+            })
+            .modal('show')
+        ;
+
+        $.ajax({
+            url: '/news/content/',
+            data: payload,
+            type: 'POST',
+            cache: false,
+            success: function (data) {
+                $(".newsview #title").text(data.news_title);
+                $(".newsview #newscontent").text(data.news_conent);
+                $(".newsview #news-like-count").text(data.news_like_count);
+                $("#news-like").removeClass("inline");
+                $("#news-like").removeClass("outline");
+                $("#news-like").addClass(data.news_like_flag);
+
+            }
+        });
+
+        $("#comment").click();
+
+
     });
 
 
-    //
     // $('#replyFormModal').on('show.bs.modal', function (event) {
     //     let button = $(event.relatedTarget); // Button that triggered the modal
     //     let recipient = button.data('who'); // Extract info from data-* attributes
@@ -141,36 +234,51 @@ $(function () {
     //     modal.find('.modal-body input.recipient').val(recipient);
     //     modal.find('.modal-body input.newsid').val(newsid);
     // });
-    //
-    // $("#postReply").click(function () {
-    //     if ($("#reply-content").val() === '') {
-    //         alert("请输入评论的内容！");
-    //         return;
-    //     }
-    //     if (currentUser === "") {
-    //         alert("请登录后再发布评论！");
-    //     } else {
-    //         // Ajax call after pushing button, to register a News object.
-    //         $.ajax({
-    //             url: '/news/post-reply/',
-    //             data: $("#postReplyForm").serialize(),
-    //             type: 'POST',
-    //             cache: false,
-    //             success: function (data) {
-    //                 let li = $('[news-id=' + data.newsid + ']');
-    //                 $(".reply .reply-count", li).text(data.replies_count);
-    //                 $("#reply-content").val("");
-    //                 $("#replyFormModal").modal("hide");
-    //                 // hide_stream_update();
-    //             },
-    //             error: function (data) {
-    //                 alert(data.responseText);
-    //             },
-    //         });
-    //     }
-    //
-    // });
-    //
+
+
+    // 发表评论
+    $("#postReply").click(function () {
+
+
+        if ($("#reply-content").val() === '') {
+            alert("请输入评论的内容！");
+            return;
+        }
+        if (currentUser === "") {
+            alert("请登录后再发布评论！");
+        } else {
+            // Ajax call after pushing button, to register a News object.
+            let payload = {
+                'newsId': newsId,
+                // 'csrf_token': csrftoken,
+                'reply-content': $("#reply-content").serialize()
+            };
+            $.ajax({
+                url: '/news/post-reply/',
+                data: payload,
+                // data: $("#postReplyForm").serialize(),
+                type: 'POST',
+                cache: false,
+                success: function (data) {
+
+                    $("#news-reply-count", item).text(data.replies_count);
+                    $("#reply-content").val("");
+                    if ($("#news-reply-count-icon", item).hasClass("outline")) {
+                        $("#news-reply-count-icon", item).removeClass("outline");
+                        $("#news-reply-count-icon", item).addClass("inline");
+
+                    }
+
+                    // hide_stream_update();
+                },
+                error: function (data) {
+                    alert(data.responseText);
+                },
+            });
+        }
+
+    });
+
     //
     // $("ul.stream").on("click", ".reply", function () {
     //     let li = $(this).closest('li');

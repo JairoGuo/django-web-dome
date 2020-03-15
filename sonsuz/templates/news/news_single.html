@@ -1,4 +1,4 @@
-{% load static   %}
+{% load static  humanize %}
 
 <div class="item" news-id="{{ news.pk }}">
     <div class="image">
@@ -7,13 +7,20 @@
     <div class="content">
         <a class="header news-header" >{{ news.title }}</a>
         <div class="meta">
-            <span>{{ news.updated_at }}</span>
+            <span>{{ news.updated_at|naturaltime }}</span>
         </div>
         <div class="description">
 {#            <p id="content-view">{{ news.content }}</p>#}
         </div>
         <div class="extra">
-            <div class="ui right floated  "><i class="comment icon"></i>{{ news.replies_count }}</div>
+
+
+
+            {% if news.replies_count == 0 %}
+                <a class="ui right floated" id="news-comment"><i class="comment outline icon" id="news-reply-count-icon"></i><span id="news-reply-count">{{ news.replies_count }}</span></a>
+            {% else %}
+                <a class="ui right floated" id="news-comment"><i class="comment inline icon"></i><span id="news-reply-count">{{ news.replies_count }}</span></a>
+            {% endif %}
             {#                        <a class="ui right floated"><i class="heart icon"></i>{{ news.likers_count }}</a>#}
 
             <div class="ui right floated likes">
