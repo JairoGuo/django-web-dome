@@ -1,14 +1,15 @@
 <div class="ui modal newsview" style="height: 90%;">
     <h1 class="header" id="title"></h1>
 
-    <div class="scrolling content">
+    <div class="scrolling content ">
         <p style="font-size: 20px" class="content" id="newscontent"></p>
     </div>
 
 
+    {# 点赞和评论 #}
     <div class="actions">
 
-        <a class="ui right floated circular icon " id="news-conten-like">
+        <a class="ui right floated circular icon "  id="news-conten-like">
             <i class="heart icon" id="news-like"></i>
 
             <span id="news-like-count"></span>
@@ -20,7 +21,6 @@
             <span id="news-comment-count"></span>
         </a>
 
-
     </div>
 
 
@@ -28,9 +28,9 @@
 
         <div class="ui accordion container fluid">
 
-            <div class="title" id="comment" style="width: 100px;">
+            <div class="title" id="comment">
                 <i class="dropdown icon"></i>
-                <span>展开评论</span>
+                <span id="comment-switch">展开评论</span>
             </div>
 
 
@@ -40,67 +40,21 @@
                 <div class="ui comments">
                     <h3 class="ui dividing header">评论</h3>
 
-                    <form class="ui reply form" id="postReplyForm" method="post">
+                    <form class="ui reply form" id="postReplyForm">
                         {% csrf_token %}
 
-
                         <div class="field">
+                            <label for="reply-content"></label>
                             <textarea id="reply-content" name="replyContent"></textarea>
                         </div>
                         <a class="ui blue labeled submit icon button" id="postReply"><i class="icon paper plane"></i>发表</a>
                     </form>
 
-                    <div class="comment">
-                        <a class="avatar">
-                            <img src="../static/images/user.png">
-                        </a>
-                        <div class="content">
-                            <a class="author">Matt</a>
-                            <div class="metadata">
-                                <span class="date">今天下午 5:42</span>
-                            </div>
-                            <div class="text">太赞了！</div>
-                            <div class="actions">
-                                <a class="reply">Reply</a>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="comment">
+                    <div class="comment " id="comment-content-item">
 
-                        <a class="avatar">
-                            <img src="../static/images/user.png">
-                        </a>
-                        <div class="content">
-                            <a class="author">Elliot Fu</a>
-                            <div class="metadata">
-                                <span class="date">昨天上午12:30</span>
-                            </div>
-                            <div class="text">
-                                <p>這對我的研究是非常有用.謝謝!</p>
-                            </div>
-                            <div class="actions">
-                                <a class="reply">Reply</a>
-                            </div>
-                        </div>
-                        <div class="comments">
-                            <div class="comment">
-                                <a class="avatar">
-                                    <img src="../static/images/user.png">
-                                </a>
-                                <div class="content">
-                                    <a class="author">Jenny Hess</a>
-                                    <div class="metadata">
-                                        <span class="date">刚刚</span>
-                                    </div>
-                                    <div class="text">艾略特你永远是多么正确 :)</div>
-                                    <div class="actions">
-                                        <a class="reply">Reply</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
+{#                    {% include "news/reply_list.html" %}#}
 
 
                 </div>

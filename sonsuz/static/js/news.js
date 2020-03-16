@@ -43,6 +43,7 @@ $(function () {
                 success: function (data) {
                     $("div.newcontent").prepend(data);
                     $("#newsInput").val("");
+                    $("#newsTitle").val("");
                     $("#newsFormModal").modal("hide");
                     // hide_stream_update();
                 },
@@ -100,6 +101,8 @@ $(function () {
             $("#comment").removeClass("active");
             $("#comment-content").removeClass("active");
         }
+        $("#reply-content").text("");
+
 
         item = $(this).closest('.item');
         newsId = $(item).attr("news-id");
@@ -124,15 +127,49 @@ $(function () {
                 $(".newsview #title").text(data.news_title);
                 $(".newsview #newscontent").text(data.news_conent);
                 $(".newsview #news-like-count").text(data.news_like_count);
+                $(".newsview #news-comment-count").text(data.news_cocmment_count);
                 $("#news-like").removeClass("inline");
                 $("#news-like").removeClass("outline");
                 $("#news-like").addClass(data.news_like_flag);
+                $("#news-comment").removeClass("inline");
+                $("#news-comment").removeClass("outline");
+                $("#news-comment").addClass(data.news_comment_flag);
 
             }
         });
 
+        $.ajax({
+            url: '/news/get-replies/',
+            data: {'newsId': newsId},
+            cache: false,
+            success: function (data) {
+                $("#comment-content-item").html(data.replies_html);
+            }
+        });
+        if ($("#comment").hasClass("active")) {
+            $("#comment-switch").text("收缩评论");
+        } else {
+            $("#comment-switch").text("展开评论");
+        }
+
 
     });
+
+
+    $('.ui.accordion')
+        .accordion()
+    ;
+
+
+    // 评论展开
+    $('.ui.accordion').click(function () {
+        if ($("#comment").hasClass("active")) {
+            $("#comment-switch").text("收缩评论");
+        } else {
+            $("#comment-switch").text("展开评论");
+        }
+    });
+
 
     // 新闻显示内的点赞功能
     $("#news-conten-like").click(function () {
@@ -188,6 +225,7 @@ $(function () {
             $("#comment").removeClass("active");
             $("#comment-content").removeClass("active");
         }
+        $("#reply-content").text("");
 
         item = $(this).closest('.item');
         newsId = $(item).attr("news-id");
@@ -203,6 +241,8 @@ $(function () {
             .modal('show')
         ;
 
+        var news_user;
+
         $.ajax({
             url: '/news/content/',
             data: payload,
@@ -216,24 +256,35 @@ $(function () {
                 $("#news-like").removeClass("outline");
                 $("#news-like").addClass(data.news_like_flag);
 
+
             }
         });
 
+        $.ajax({
+            url: '/news/get-replies/',
+            data: {'newsId': newsId},
+            cache: false,
+            success: function (data) {
+                $("#comment-content-item").html(data.replies_html);
+            }
+        });
         $("#comment").click();
+        // $("#reply-content").text("@"+$(item).attr("news-user")+": ");
 
 
     });
 
+    // 新闻显示内评论功能
+    $("#news-conten-comment").click(function () {
 
-    // $('#replyFormModal').on('show.bs.modal', function (event) {
-    //     let button = $(event.relatedTarget); // Button that triggered the modal
-    //     let recipient = button.data('who'); // Extract info from data-* attributes
-    //     let newsid = button.data('newsid'); // Extract info from data-* attributes
-    //     let modal = $(this);
-    //     modal.find('.modal-title').text('新的回复到： ' + recipient);
-    //     modal.find('.modal-body input.recipient').val(recipient);
-    //     modal.find('.modal-body input.newsid').val(newsid);
-    // });
+        if (currentUser === "") {
+            alert("请登录后再评论！");
+            return;
+        }
+        $("#comment-switch").text("展开评论");
+        $("#comment").click();
+
+    });
 
 
     // 发表评论
@@ -248,26 +299,37 @@ $(function () {
             alert("请登录后再发布评论！");
         } else {
             // Ajax call after pushing button, to register a News object.
-            let payload = {
-                'newsId': newsId,
-                // 'csrf_token': csrftoken,
-                'reply-content': $("#reply-content").serialize()
-            };
+            // let payload = {
+            //     'newsId': newsId,
+            //     // 'csrf_token': csrftoken,
+            //     'reply-content': $("#reply-content").serialize()
+            // };
             $.ajax({
                 url: '/news/post-reply/',
-                data: payload,
+                // data: payload,
+                data: $("#postReplyForm").serialize() + "&newsId=" + newsId,
                 // data: $("#postReplyForm").serialize(),
                 type: 'POST',
                 cache: false,
                 success: function (data) {
 
                     $("#news-reply-count", item).text(data.replies_count);
+                    $(".newsview #news-comment-count").text(data.replies_count);
+
                     $("#reply-content").val("");
                     if ($("#news-reply-count-icon", item).hasClass("outline")) {
                         $("#news-reply-count-icon", item).removeClass("outline");
                         $("#news-reply-count-icon", item).addClass("inline");
-
                     }
+
+                    $.ajax({
+                url: '/news/get-replies/',
+                data: {'newsId': newsId},
+                cache: false,
+                success: function (data) {
+                    $("#comment-content-item").html(data.replies_html);
+                }
+            });
 
                     // hide_stream_update();
                 },
@@ -275,21 +337,11 @@ $(function () {
                     alert(data.responseText);
                 },
             });
+
+
         }
 
     });
 
-    //
-    // $("ul.stream").on("click", ".reply", function () {
-    //     let li = $(this).closest('li');
-    //     let newsId = $(li).attr("news-id");
-    //     $.ajax({
-    //         url: '/news/get-replies/',
-    //         data: {'newsId': newsId},
-    //         cache: false,
-    //         success: function (data) {
-    //             $("#replyListModal .modal-body").html(data.replies_html);
-    //         }
-    //     });
-    // });
+
 });

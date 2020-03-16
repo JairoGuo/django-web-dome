@@ -9,41 +9,45 @@
 {% block content %}
 
     <div class="ui divided  items newcontent">
-        {% for news in news_list %}
+        {% for news in news_manages_list %}
 
-            <div class="item" news-id="{{ news.pk }}">
-{#                <div class="image">#}
-{#                    <img src="{% static "images/news.png" %}" style="border-radius: 15px;">#}
-{#                </div>#}
-                <div class="content">
-                    <a class="header news-header" >{{ news.title }}</a>
-                    <div class="meta">
-                        <span>{{ news.updated_at }}</span>
-                    </div>
-                    <div class="description">
+            {% if request.user.username == news.user.username %}
 
-
-                        {#                        <p>{{ news.content }}</p>#}
-                    </div>
-                    <div class="extra">
-
-                        <a class="ui right floated"
-                           style="color: orangered;"
-                           href="{% url 'news:delete_news' news.pk %}">
-                            <i class="trash icon"></i>删除
-                        </a>
-
-                        <a class="ui right floated" >
-                            <i class="edit icon"></i>编辑
-                        </a>
-                        <a class="ui right floated news-header" href="#">
-                            <i class="eye icon"></i>查看
-                        </a>
+                <div class="item" news-id="{{ news.pk }}">
+                    {#                <div class="image">#}
+                    {#                    <img src="{% static "images/news.png" %}" style="border-radius: 15px;">#}
+                    {#                </div>#}
+                    <div class="content">
+                        <a class="header news-header">{{ news.title }}</a>
+                        <div class="meta">
+                            <span>{{ news.updated_at }}</span>
+                        </div>
+                        <div class="description">
 
 
+                            {#                        <p>{{ news.content }}</p>#}
+                        </div>
+                        <div class="extra">
+
+                            <a class="ui right floated"
+                               style="color: orangered;"
+                               href="{% url 'news:delete_news' news.pk %}">
+                                <i class="trash icon"></i>删除
+                            </a>
+
+                            <a class="ui right floated">
+                                <i class="edit icon"></i>编辑
+                            </a>
+                            <a class="ui right floated news-header" href="#">
+                                <i class="eye icon"></i>查看
+                            </a>
+
+
+                        </div>
                     </div>
                 </div>
-            </div>
+
+            {% endif %}
 
         {% endfor %}
     </div>

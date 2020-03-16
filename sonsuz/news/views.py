@@ -15,17 +15,24 @@ from sonsuz.utils.utils import ajax_required, AuthorRequiredMixin
 
 
 class NewsListView(ListView):
-    model = News
+    # model = News
     paginate_by = 10
     template_name = 'news/news_list.html'
     context_object_name = 'news_list'
+    def get_queryset(self, *kwargs):
+        return News.objects.filter(reply=False).select_related('user').prefetch_related('likers')
 
 
 class NewsManageView(ListView):
-    model = News
+    # model = News
     paginate_by = 10
     template_name = 'news/news_manages.html'
-    # context_object_name = 'news_list'
+    context_object_name = 'news_manages_list'
+
+
+
+    def get_queryset(self, *kwargs):
+        return News.objects.filter(reply=False).select_related('user').prefetch_related('likers')
 
 @login_required
 @ajax_required
@@ -76,10 +83,16 @@ def contents(request):
     if request.user in news.get_likers():
         like_flag = "inline"
 
+    comment_flag = "outline"
+    if news.replies_count() != 0:
+        comment_flag = "inline"
+
     return JsonResponse({"news_conent": news.get_content(),
                          "news_title": news.title,
                          "news_like_count": news.likers_count(),
-                         "news_like_flag": like_flag
+                         "news_like_flag": like_flag,
+                         "news_comment_flag": comment_flag,
+                         "news_cocmment_count": news.replies_count()
                          })
 
 
@@ -89,7 +102,9 @@ def contents(request):
 @require_http_methods(["POST"])
 def post_reply(request):
     """发送回复，AJAX POST请求"""
-    replyContent = request.POST['reply-content']
+    # replyContent = request.POST['reply-content'].strip()
+    replyContent = request.POST['replyContent'].strip()
+    # print(request.POST["reply-content"]["replyContent"])
     parentId = request.POST['newsId']
     parent = News.objects.get(pk=parentId)
     if replyContent:
@@ -99,18 +114,18 @@ def post_reply(request):
         return HttpResponseBadRequest("内容不能为空！")
 #
 #
-# @ajax_required
-# @require_http_methods(["GET"])
-# def get_replies(request):
-#     """返回新闻的评论，AJAX GET请求"""
-#     news_id = request.GET['newsId']
-#     news = News.objects.get(pk=news_id)
-#     # render_to_string()表示加载模板，填充数据，返回字符串
-#     replies_html = render_to_string("news/reply_list.html", {"replies": news.get_children()})  # 有评论的时候
-#     return JsonResponse({
-#         "newsid": news_id,
-#         "replies_html": replies_html,
-#     })
+@ajax_required
+@require_http_methods(["GET"])
+def get_replies(request):
+    """返回新闻的评论，AJAX GET请求"""
+    news_id = request.GET['newsId']
+    news = News.objects.get(pk=news_id)
+    # render_to_string()表示加载模板，填充数据，返回字符串
+    replies_html = render_to_string("news/reply_list.html", {"replies": news.get_children()})  # 有评论的时候
+    return JsonResponse({
+        "newsid": news_id,
+        "replies_html": replies_html,
+    })
 #
 #
 # @login_required

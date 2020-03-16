@@ -12,17 +12,18 @@
 {% block content %}
 
 
-    <div class="ui padded grid container">
-        <div class="eleven wide column ">
+    <div class="ui padded grid fluid container">
+        <div class="eleven wide column " id="main-news">
             <div class="ui divided  items newcontent">
                 {% for news in news_list %}
+
                     {% include "news/news_single.html" with news=news %}
                 {% endfor %}
             </div>
 
         </div>
 
-        <div class="five wide column fluid container">
+        <div class="five wide column fluid container" id="hot-news">
 
             <a class="fluid ui button" onclick="addnews()">发布新闻</a>
 
@@ -34,7 +35,9 @@
                     <div class="item">
 
                         <div class="content">
-                            <a class="header" href="{% url "news:list" %}">{{ news.title }}</a>
+                            <a class="header"
+                               style=" width: 300px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"
+                               href="{% url "news:list" %}">{{ news.title }}</a>
 
                         </div>
                     </div>
@@ -50,7 +53,10 @@
                     <div class="item">
 
                         <div class="content">
-                            <a class="header" href="{% url "news:list" %}">{{ news.title }}</a>
+                            <a class="header"
+                               style=" width: 300px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"
+                               href="{% url "news:list" %}">
+                                {{ news.title }}</a>
 
                         </div>
                     </div>
@@ -76,14 +82,18 @@
 
     {{ block.super }}
 
+
     <script src="{% static 'js/news.js' %}" type="text/javascript"></script>
 
     <script>
+        if (window.screen.width <= 700) {
+            $("#main-news").removeClass("eleven wide");
+            $("#hot-news").remove();
+        }
 
-        $('.ui.accordion')
-                .accordion()
-        ;
+
     </script>
+
 
     <script>
         {#function f(obj) {#}

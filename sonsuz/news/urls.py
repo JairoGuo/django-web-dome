@@ -12,9 +12,7 @@ urlpatterns = [
     path('like/', views.like, name='post_like'),
     path('content/', views.contents, name='post_content'),
     path('post-reply/', views.post_reply, name='post_reply'),
-    # path('get-replies/', views.get_replies, name='get_replies'),
+    path('get-replies/', views.get_replies, name='get_replies'),
 
-    # path('post-reply/', views.post_reply, name='post_reply'),
-    # path('get-replies/', views.get_replies, name='get_replies'),
     # path('update-interactions/', views.update_interactions, name='update_interactions'),
 ]

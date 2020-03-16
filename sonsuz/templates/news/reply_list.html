@@ -1,0 +1,27 @@
+{% load static humanize  thumbnail %}
+
+{% for reply in replies %}
+    <div class="comment">
+        <a class="avatar">
+            {% thumbnail reply.user.avatar "x25" as im %}
+
+                <img class="ui avatar image" src="{{ im.url }}">
+            {% empty %}
+                <img class="ui avatar image" src="{% static "images/user.png" %}">
+            {% endthumbnail %}
+
+        </a>
+        <div class="content">
+            <a class="author">{{ reply.user.get_profile_name }}</a>
+            <div class="metadata">
+                <span class="date">{{ reply.created_at|naturaltime }}</span>
+            </div>
+            <div class="text">{{ reply.content }}</div>
+            <div class="actions">
+                <a class="reply">回复</a>
+            </div>
+        </div>
+    </div>
+
+
+{% endfor %}

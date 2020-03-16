@@ -1,33 +1,39 @@
 {% load static  humanize %}
 
-<div class="item" news-id="{{ news.pk }}">
+<div class="item" news-user="{% if news.user.name == None %}{{ news.user }}{% else %}{{ news.user.name }}{% endif %}"
+     news-id="{{ news.pk }}">
     <div class="image">
         <img src="{% static "images/news.png" %}" style="border-radius: 15px;">
     </div>
     <div class="content">
-        <a class="header news-header" >{{ news.title }}</a>
+        <a class="header news-header"
+           style=" width: 95%;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{ news.title }}</a>
         <div class="meta">
             <span>{{ news.updated_at|naturaltime }}</span>
         </div>
         <div class="description">
-{#            <p id="content-view">{{ news.content }}</p>#}
+            {#            <p id="content-view">{{ news.content }}</p>#}
         </div>
         <div class="extra">
 
 
-
             {% if news.replies_count == 0 %}
-                <a class="ui right floated" id="news-comment"><i class="comment outline icon" id="news-reply-count-icon"></i><span id="news-reply-count">{{ news.replies_count }}</span></a>
+                <a class="ui right floated" id="news-comment"><i class="comment outline icon"
+                                                                 id="news-reply-count-icon"></i><span
+                        id="news-reply-count">{{ news.replies_count }}</span></a>
             {% else %}
-                <a class="ui right floated" id="news-comment"><i class="comment inline icon"></i><span id="news-reply-count">{{ news.replies_count }}</span></a>
+                <a class="ui right floated" id="news-comment"><i class="comment inline icon"></i><span
+                        id="news-reply-count">{{ news.replies_count }}</span></a>
             {% endif %}
             {#                        <a class="ui right floated"><i class="heart icon"></i>{{ news.likers_count }}</a>#}
 
             <div class="ui right floated likes">
                 {% if request.user in news.get_likers %}
-                    <a class="header" ><i class="heart inline icon"></i><span class="like-count">{{ news.likers_count }}</span></a>
+                    <a class="header"><i class="heart inline icon"></i><span
+                            class="like-count">{{ news.likers_count }}</span></a>
                 {% else %}
-                    <a class="header"><i class="heart outline icon"></i><span class="like-count">{{ news.likers_count }}</span></a>
+                    <a class="header"><i class="heart outline icon"></i><span
+                            class="like-count">{{ news.likers_count }}</span></a>
 
                 {% endif %}
             </div>

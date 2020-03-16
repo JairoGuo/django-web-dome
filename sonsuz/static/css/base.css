@@ -69,6 +69,10 @@
    #pc-user-menu {
        display: none;
    }
+
+   #hot-news {
+       display: none;
+   }
   .secondary.pointing.menu .item,
   .secondary.pointing.menu .menu {
     display: none;
