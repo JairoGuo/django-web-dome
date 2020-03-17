@@ -1,5 +1,6 @@
 from django.conf import settings
-from django.urls import include, path
+from django.conf.urls import url
+from django.urls import include, path, re_path
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
@@ -10,7 +11,6 @@ urlpatterns = [
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
     path("about/", TemplateView.as_view(template_name="pages/about.html"), name="about"),
     # path("news/", TemplateView.as_view(template_name="pages/news.html"), name="news"),
-    path("blogs/", TemplateView.as_view(template_name="pages/blogs.html"), name="blogs"),
     path("quora/", TemplateView.as_view(template_name="pages/quora.html"), name="quora"),
     path("chat/", TemplateView.as_view(template_name="pages/chat.html"), name="chat"),
     # Django Admin, use {% url 'admin:index' %}
@@ -19,10 +19,15 @@ urlpatterns = [
     path("users/", include("sonsuz.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
 
-    # news management
+    # app management
     path("news/", include("sonsuz.news.urls", namespace="news")),
+    path("blogs/", include("sonsuz.blogs.urls", namespace="blogs")),
 
-    # Your stuff: custom urls includes go here
+    # 第三方路由
+    # url(r'mdeditor/', include('mdeditor.urls')),
+    re_path(r'mdeditor/', include('mdeditor.urls')),
+
+                  # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

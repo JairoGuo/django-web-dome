@@ -13,6 +13,7 @@ mysqlclient
 sqlparse
 sorl-thumbnail # 缩略图
 
+
 # Django
 # ------------------------------------------------------------------------------
 django==2.2.10  # pyup: < 3.0  # https://www.djangoproject.com/
@@ -22,6 +23,8 @@ django-allauth==0.41.0  # https://github.com/pennersr/django-allauth
 django-crispy-forms==1.9.0  # https://github.com/django-crispy-forms/django-crispy-forms
 django-compressor==2.4  # https://github.com/django-compressor/django-compressor
 django-redis==4.11.0  # https://github.com/niwinz/django-redis
+django-taggit
+django-mdeditor
 
 # Django REST Framework
 # djangorestframework==3.11.0  # https://github.com/encode/django-rest-framework

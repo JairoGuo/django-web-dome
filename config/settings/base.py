@@ -76,12 +76,16 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount",
     # "rest_framework",
     "django_celery_beat",
-    "sorl.thumbnail"
+    "sorl.thumbnail",
+    "taggit",
+    "mdeditor"
 ]
 
 LOCAL_APPS = [
     "sonsuz.users.apps.UsersConfig",
     "sonsuz.news.apps.NewsConfig",
+    "sonsuz.blogs.apps.BlogsConfig",
+
 
     # Your stuff: custom apps go here
 ]
@@ -216,7 +220,8 @@ CSRF_COOKIE_HTTPONLY = False
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-browser-xss-filter
 SECURE_BROWSER_XSS_FILTER = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#x-frame-options
-X_FRAME_OPTIONS = "DENY"
+# X_FRAME_OPTIONS = "DENY"
+X_FRAME_OPTIONS = "SAMEORIGIN"
 
 # EMAIL
 # ------------------------------------------------------------------------------
