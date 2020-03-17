@@ -284,13 +284,14 @@
         <script>
             $(function () {
                 let flags = ['news', 'about', 'blogs', 'quora', 'chat'];
-                let href = window.location.href;
+                let hrefs = window.location.href;
+                let href = hrefs.split("/")[3];
                 let isHome = true;
                 flags.forEach(function (item) {
-                    if (href.indexOf(item) !== -1) {
+
+                    if (href === item && hrefs.split("/").length ==5 ) {
                         $('#' + item).addClass('active');
                         $('#m' + item).addClass('active');
-
                         isHome = false
                     } else {
                         $('#' + item).removeClass('active');
@@ -298,7 +299,8 @@
 
                     }
                 });
-                if (isHome) {
+
+                if (isHome && hrefs.split("/").length ==4) {
                     $('#home').addClass('active');
                     $('#mhome').addClass('active');
 

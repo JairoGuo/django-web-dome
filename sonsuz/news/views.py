@@ -104,7 +104,7 @@ def post_reply(request):
     """发送回复，AJAX POST请求"""
     # replyContent = request.POST['reply-content'].strip()
     replyContent = request.POST['replyContent'].strip()
-    # print(request.POST["reply-content"]["replyContent"])
+
     parentId = request.POST['newsId']
     parent = News.objects.get(pk=parentId)
     if replyContent:
