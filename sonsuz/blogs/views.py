@@ -3,32 +3,32 @@
 # from django.urls import reverse, reverse_lazy
 # from django.utils.decorators import method_decorator
 # from django.views.decorators.cache import cache_page
-# from django.views.generic import ListView, CreateView, DetailView, UpdateView
+from django.views.generic import ListView, CreateView, DetailView, UpdateView
 #
 # from django_comments.signals import comment_was_posted
 #
-# from mydjango.blogs.models import Article, ArticleCategory
+from sonsuz.blogs.models import Article, ArticleCategory
 # from mydjango.blogs.forms import ArticleForm
 # from mydjango.utils import AuthorRequiredMixin
 # from mydjango.notifications.views import notification_handler
 #
 #
-# class ArticleListView(ListView):
-#     """已发布的文章列表"""
-#     model = Article
-#     paginate_by = 5
-#     context_object_name = 'article_list'
-#     template_name = "blogs/article_list.html"
-#
-#     def get_queryset(self, **kwargs):
-#         return Article.objects.get_published()
-#
-#     def get_context_data(self, *args, **kwargs):
-#         context = super(ArticleListView, self).get_context_data(*args, **kwargs)
-#         context['article_categories'] = ArticleCategory.objects.all()
-#         context['popular_tags'] = Article.objects.get_counted_tags()
-#         return context
-#
+class ArticleListView(ListView):
+    """已发布的文章列表"""
+    model = Article
+    paginate_by = 5
+    context_object_name = 'article_list'
+    template_name = "blogs/article_list.html"
+
+    def get_queryset(self, **kwargs):
+        return Article.objects.get_published()
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(ArticleListView, self).get_context_data(*args, **kwargs)
+        context['article_categories'] = ArticleCategory.objects.all()
+        context['popular_tags'] = Article.objects.get_counted_tags()
+        return context
+
 #
 # class DraftListView(ArticleListView):
 #     """草稿箱文章列表"""

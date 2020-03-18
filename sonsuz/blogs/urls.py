@@ -1,9 +1,9 @@
 from django.urls import path
 from django.views.generic import TemplateView
 
-from sonsuz.news import  views
+from sonsuz.blogs import  views
 
 app_name = "blogs"
 urlpatterns = [
-    path("", TemplateView.as_view(template_name="pages/news.html"), name="list"),
+    path("", views.ArticleListView.as_view(), name="list"),
 ]
