@@ -1,14 +1,15 @@
-# from django.contrib import messages
-# from django.contrib.auth.mixins import LoginRequiredMixin
-# from django.urls import reverse, reverse_lazy
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse, reverse_lazy
 # from django.utils.decorators import method_decorator
 # from django.views.decorators.cache import cache_page
 from django.views.generic import ListView, CreateView, DetailView, UpdateView
 #
 # from django_comments.signals import comment_was_posted
 #
+from sonsuz.blogs.forms import ArticleForm
 from sonsuz.blogs.models import Article, ArticleCategory
-# from mydjango.blogs.forms import ArticleForm
+
 # from mydjango.utils import AuthorRequiredMixin
 # from mydjango.notifications.views import notification_handler
 #
@@ -37,23 +38,23 @@ class ArticleListView(ListView):
 #
 #
 # @method_decorator(cache_page(60*60), name='get')
-# class ArticleCreateView(LoginRequiredMixin, CreateView):
-#     """创建文章"""
-#     model = Article
-#     form_class = ArticleForm
-#     template_name_suffix = '_create_form'
-#     template_name = "blogs/article_create_form.html"
-#
-#     def form_valid(self, form):
-#         form.instance.user = self.request.user
-#         return super(ArticleCreateView,self).form_valid(form)
-#
-#     # success_url = reverse_lazy('blogs:list')
-#     def get_success_url(self):
-#         message = "您的文章已创建成功！"  # Django框架中的消息闪现机制
-#         messages.success(self.request, message)  # 消息传递给下一次请求
-#         return reverse_lazy('blogs:list')
-#
+class ArticleCreateView(LoginRequiredMixin, CreateView):
+    """创建文章"""
+    model = Article
+    form_class = ArticleForm
+    template_name_suffix = '_create_form'
+    template_name = "blogs/article_create_form.html"
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super(ArticleCreateView,self).form_valid(form)
+
+    # success_url = reverse_lazy('blogs:list')
+    def get_success_url(self):
+        message = "您的文章已创建成功！"  # Django框架中的消息闪现机制
+        messages.success(self.request, message)  # 消息传递给下一次请求
+        return reverse_lazy('blogs:list')
+
 #
 # class ArticleDetailView(DetailView):
 #     """文章详情"""

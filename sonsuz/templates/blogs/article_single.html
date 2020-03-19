@@ -1,16 +1,16 @@
 {% load static humanize thumbnail%}
 
 <div class="item">
-    <div class="image" style="height: 145px; width: 175px">
-
-        {% thumbnail article.cover "300x400" as im %}
-            <img src="{{ im.url }}" style="height: 145px; width: 175px;border-radius: 15px;">
-
-        {% empty %}
-            <img src="{% static "images/news.png" %}" style="height: 145px; width: 175px;border-radius: 15px;">
-        {% endthumbnail %}
-
-    </div>
+{#    <div class="image" style="height: 145px; width: 175px">#}
+{##}
+{#        {% thumbnail article.cover "300x400" as im %}#}
+{#            <img src="{{ im.url }}" style="height: 145px; width: 175px;border-radius: 15px;">#}
+{##}
+{#        {% empty %}#}
+{#            <img src="{% static "images/news.png" %}" style="height: 145px; width: 175px;border-radius: 15px;">#}
+{#        {% endthumbnail %}#}
+{##}
+{#    </div>#}
     <div class="content">
         <a class="header"
            style=" width: 95%;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{ article.title }}</a>

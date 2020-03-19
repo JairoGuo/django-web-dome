@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load static crispy_forms_tags %}
+
+{% block title %}
+    写文章 | {{ block.super }}
+{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+
+    {{ form.media }}
+{% endblock %}
+
+{% block bar %}
+    <div class="ui center aligned ">
+
+        <div class="ui container ">
+            <div class="ui secondary icon menu">
+
+                <a class="item" href="{% url 'blogs:list' %}">
+                    <i class="reply big icon"></i>
+
+                </a>
+
+                <div class="item">
+                    <h1 class="center aligned">写文章</h1>
+                </div>
+
+                <div class="right item">
+                    <div class="ui buttons">
+                        <button class="ui button" onclick="f()">保存草稿</button>
+                        <div class="or"></div>
+                        <button class="positive ui button" type="submit" onclick="create_article()">发表</button>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="ui ">
+        <div class="row">
+            <form id="create-article" role="form" method="post" enctype="multipart/form-data"
+                  id="articleForm" action="{% url 'blogs:create' %}" style="width: 100%">
+                {% csrf_token %}
+                {#                {{ form|crispy }}#}
+                <div class="ui fluid icon input">
+
+
+                    {{ form.title }}
+                </div>
+                <br>
+
+                <div>
+
+                    {{ form.content }}
+                </div>
+
+                {#                <div class="ui right labeled left icon input">#}
+                {#                    <i class="tags icon"></i>#}
+                {#                    {{ form.tags.errors }}#}
+                {#                    {{ form.tags }}#}
+                {#                    <a class="ui tag label">#}
+                {#                        添加标签#}
+                {#                    </a>#}
+                {#                </div>#}
+
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block modal %}
+    <div class="ui  modal err small" id="err">
+        <i class="close icon"></i>
+        <div class="header">
+
+        </div>
+        <div class="image content">
+            <div class="image">
+                图像可以出现在左边或图标上
+            </div>
+            <div class="description">
+                描述可以出现在右边
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui button">取消</div>
+            <div class="ui button">确定</div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    {{ block.super }}
+    <script>
+        $(function () {
+            $.get("{% static 'editormd_src/examples/test.md' %}", function (testmd) {
+                $("#id_content").text(testmd);
+            })
+        });
+    </script>
+
+    <script>
+        function create_article() {
+            if ($("#title").val() ==="") {
+                $("#title").attr("placeholder", "请输入文章标题");
+                $("#title").addClass("red");
+                $("#err .header").text("请输入文章标题");
+                f();
+                return;
+            }
+            $("#create-article").submit();
+
+        }
+    </script>
+
+    <script>
+        function f() {
+
+
+
+                $('.ui.modal.err')
+                    .modal('show')
+            ;
+
+
+
+        }
+    </script>
+{% endblock %}

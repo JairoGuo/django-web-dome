@@ -37,6 +37,10 @@
 
 <body>
 
+
+
+
+
 {# 手机端适应 #}
 <div class="ui vertical inverted sidebar menu">
     <div class="item">
@@ -115,10 +119,10 @@
 </div>
 
 <div class="pusher">
+    {% block bar %}
+    <div class="ui inverted vertical center aligned segment mini">
 
-    <div class="ui inverted vertical center aligned segment">
-
-        <div class="ui container ">
+        <div class="ui container">
             <div class="ui large secondary inverted pointing  menu ">
                 <a class="toc item">
                     <i class="sidebar icon"></i>
@@ -139,9 +143,27 @@
                     </div>
                     <div class="results"></div>
                 </div>
+
+
                 <div class="right item" id="pc-user-menu">
 
+
                     {% if request.user.is_authenticated %}
+
+
+                        <div class="ui teal buttons" style="padding-right: 10px">
+                            <div class="ui button">创建</div>
+                            <div class="ui floating dropdown icon button  createbutton">
+                                <i class="dropdown icon"></i>
+                                <div class="menu">
+                                    <a class="item" onclick="addnews()"><i class="edit icon"></i> 写新闻</a>
+                                    <a class="item" href="{% url 'blogs:create' %}"><i class="delete icon"></i> 写博客</a>
+                                    <a class="item"><i class="hide icon"></i> 提问题</a>
+                                </div>
+                            </div>
+                        </div>
+
+
                         <div class=" ui dropdown userdropdown">
                             {% thumbnail request.user.avatar "x25" as im %}
                                 <img class="ui avatar image" src="{{ im.url }}">
@@ -185,10 +207,13 @@
                     {% endif %}
 
                 </div>
+
+
             </div>
         </div>
 
     </div>
+    {% endblock %}
 
     <div class="ui container" style="padding-top: 15px">
 
@@ -216,9 +241,16 @@
             <p>Use this document as a way to quick start any new project.</p>
         {% endblock content %}
 
+
     </div> <!-- /container -->
 </div>
-{% block modal %}{% endblock modal %}
+
+{% block modal %}
+    {% include "news/news_form_modal.html" %}
+
+
+
+{% endblock modal %}
 
 <!-- Le javascript
 ================================================== -->
@@ -226,9 +258,10 @@
 {% block javascript %}
 
     <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
-{#    <script src="{% static 'js/popper.js' %}"></script>#}
+    {#    <script src="{% static 'js/popper.js' %}"></script>#}
     {#    <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>#}
     <script src="{% static 'semantic/semantic.min.js' %}"></script>
+    <script src="{% static 'js/news.js' %}"></script>
 
     <!-- Your stuff: Third-party javascript libraries go here -->
 
@@ -259,6 +292,20 @@
                 on: 'hover',
                 transition: 'drop'
             });
+
+
+            $('.createbutton')
+                    .dropdown()
+            ;
+
+
+        </script>
+
+        <script>
+
+        $('.err')
+  .modal()
+;
         </script>
 
 
@@ -281,6 +328,15 @@
                         .sidebar('attach events', '.toc.item');
             });
         </script>
+
+        <script>
+            function addnews() {
+
+                $('.addnews')
+                        .modal('show')
+                ;
+            }
+        </script>
         <script>
             $(function () {
                 let flags = ['news', 'about', 'blogs', 'quora', 'chat'];
@@ -289,7 +345,7 @@
                 let isHome = true;
                 flags.forEach(function (item) {
 
-                    if (href === item && hrefs.split("/").length ==5 ) {
+                    if (href === item && hrefs.split("/").length == 5) {
                         $('#' + item).addClass('active');
                         $('#m' + item).addClass('active');
                         isHome = false
@@ -300,7 +356,7 @@
                     }
                 });
 
-                if (isHome && hrefs.split("/").length ==4) {
+                if (isHome && hrefs.split("/").length == 4) {
                     $('#home').addClass('active');
                     $('#mhome').addClass('active');
 
