@@ -56,10 +56,12 @@
                 </div>
                 <br>
 
-                <div>
+                <div id="article-content">
+                                                        {{ form.content }}
 
-                    {{ form.content }}
+
                 </div>
+
 
                 {#                <div class="ui right labeled left icon input">#}
                 {#                    <i class="tags icon"></i>#}
@@ -77,7 +79,7 @@
 
 {% block modal %}
     <div class="ui  modal err small" id="err">
-        <i class="close icon"></i>
+
         <div class="header">
 
         </div>
@@ -90,8 +92,7 @@
             </div>
         </div>
         <div class="actions">
-            <div class="ui button">取消</div>
-            <div class="ui button">确定</div>
+            <div class="ui button close">确定</div>
         </div>
     </div>
 {% endblock %}
@@ -109,12 +110,12 @@
     <script>
         function create_article() {
             if ($("#title").val() ==="") {
-                $("#title").attr("placeholder", "请输入文章标题");
-                $("#title").addClass("red");
+                {#$("#title").attr("placeholder", "请输入文章标题");#}
                 $("#err .header").text("请输入文章标题");
                 f();
                 return;
             }
+
             $("#create-article").submit();
 
         }

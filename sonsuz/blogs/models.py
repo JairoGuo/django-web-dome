@@ -18,6 +18,7 @@ class ArticleCategory(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='创建时间', db_index=True)
     updated_at = models.DateTimeField(auto_now=True, verbose_name='更新时间')
 
+
     def __str__(self):
         return self.catname
 

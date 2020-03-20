@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render_to_response, render
 from django.urls import reverse, reverse_lazy
 # from django.utils.decorators import method_decorator
 # from django.views.decorators.cache import cache_page
@@ -30,13 +31,22 @@ class ArticleListView(ListView):
         context['popular_tags'] = Article.objects.get_counted_tags()
         return context
 
-#
-# class DraftListView(ArticleListView):
-#     """草稿箱文章列表"""
-#     def get_queryset(self, **kwargs):
-#         return Article.objects.get_drafts()
-#
-#
+
+def category_list(request):
+    result = ArticleCategory.objects.all()
+    return render_to_response('blogs/article_list.html', {'category': result})
+
+
+
+
+
+
+class DraftListView(ArticleListView):
+    """草稿箱文章列表"""
+    def get_queryset(self, **kwargs):
+        return Article.objects.get_drafts()
+
+
 # @method_decorator(cache_page(60*60), name='get')
 class ArticleCreateView(LoginRequiredMixin, CreateView):
     """创建文章"""
@@ -56,16 +66,16 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
         return reverse_lazy('blogs:list')
 
 #
-# class ArticleDetailView(DetailView):
-#     """文章详情"""
-#     model = Article
-#     template_name = 'blogs/article_detail.html'
-#     context_object_name = 'article'
-#
-#     def get_queryset(self):
-#         return Article.objects.select_related('user').filter(
-#             slug=self.kwargs['slug']
-#         )
+class ArticleDetailView(DetailView):
+    """文章详情"""
+    model = Article
+    template_name = 'blogs/article_detail.html'
+    context_object_name = 'article'
+
+    def get_queryset(self):
+        return Article.objects.select_related('user').filter(
+            slug=self.kwargs['slug']
+        )
 #
 #
 # class ArticleUpdateView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):

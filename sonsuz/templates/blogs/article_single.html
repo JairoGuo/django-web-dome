@@ -1,6 +1,6 @@
 {% load static humanize thumbnail%}
 
-<div class="item">
+<div class=" item">
 {#    <div class="image" style="height: 145px; width: 175px">#}
 {##}
 {#        {% thumbnail article.cover "300x400" as im %}#}
@@ -11,16 +11,23 @@
 {#        {% endthumbnail %}#}
 {##}
 {#    </div>#}
+
+
     <div class="content">
-        <a class="header"
-           style=" width: 95%;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{ article.title }}</a>
+
+        <a class="header" href="{% url 'blogs:detail' article.slug %}"
+           style="padding-top: 5px; width: 95%;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+            <span>{{ article.title }}</span>
+        </a>
         <div class="meta">
-            <span>{{ article.updated_at|naturaltime }}</span>
         </div>
         <div class="description">
             <p>{{ article.abstract|safe|truncatechars:80 }}</p>
         </div>
+
         <div class="extra">
+
+
 
 
 {#            {% if news.replies_count == 0 %}#}
@@ -33,16 +40,28 @@
 {#            {% endif %}#}
             {#                        <a class="ui right floated"><i class="heart icon"></i>{{ news.likers_count }}</a>#}
 {##}
-{#            <div class="ui right floated likes">#}
-{#                {% if request.user in news.get_likers %}#}
-{#                    <a class="header"><i class="heart inline icon"></i><span#}
-{#                            class="like-count">{{ news.likers_count }}</span></a>#}
-{#                {% else %}#}
-{#                    <a class="header"><i class="heart outline icon"></i><span#}
-{#                            class="like-count">{{ news.likers_count }}</span></a>#}
-{##}
-{#                {% endif %}#}
-{#            </div>#}
+
+            {% thumbnail article.user.avatar "x25" as im %}
+                <a href="{% url 'users:detail' article.user.username %}">
+                                <img class="ui avatar image" src="{{ im.url }}"><spqn>{{ article.user.get_profile_name }}</spqn>
+
+                </a>
+            {% empty %}
+                <a href="{% url 'users:detail' article.user.username %}">
+                                <img class="ui avatar image" src="{% static "images/user.png" %}"><spqn>{{ article.user.get_profile_name }}</spqn>
+
+                </a>
+            {% endthumbnail %}
+
+                    <span>{{ article.updated_at|naturaltime }}</span>
+
+            <div class="ui right floated">
+            <span>标签: </span>
+                {% for tag in article.tags.names %}
+
+                <a class="ui small  teal label">{{ tag }}</a>
+            {% endfor %}
+            </div>
 
 
         </div>

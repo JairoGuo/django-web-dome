@@ -9,8 +9,34 @@
 {% block content %}
 
     <div class="ui padded grid fluid doubling stackable container">
-        <div class="eleven wide column " id="main-blogs">
-            <div class="ui divided  items blogscontent">
+
+
+        <div class="three wide column">
+            <div class="ui link items">
+
+                <div class="item">
+                    <div class="content">
+                        <div><i class="circle icon"></i>史蒂夫.费利西亚诺</div>
+                        <div class="description">
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+
+                {% for item in category %}
+                <div class="item">
+                    <div class="content">
+                        <div><i class="circle icon"></i>{{item.catname}}</div>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        <div class="nine wide column " id="main-blogs">
+            <div class="ui divided items blogscontent">
                 {% for article in article_list %}
 
                     {% include "blogs/article_single.html" with item=article_item %}
@@ -19,15 +45,16 @@
 
         </div>
 
-        <div class="five wide column fluid container">
+        <div class="four wide column fluid container">
             <div class="ui card">
                 <div class="content">
                     <div class="header">标签云</div>
                     <div class="content fluid">
                         {% for tag, count in popular_tags %}
 
-                        <a class="ui tag label">{{ tag }}({{ count }})</a>
-                    {% endfor %}
+                            <a class="ui small  teal label" style="margin: 2px;">{{ tag }}({{ count }})</a>
+
+                        {% endfor %}
                     </div>
 
                 </div>

@@ -159,6 +159,9 @@
                                     <a class="item" onclick="addnews()"><i class="edit icon"></i> 写新闻</a>
                                     <a class="item" href="{% url 'blogs:create' %}"><i class="delete icon"></i> 写博客</a>
                                     <a class="item"><i class="hide icon"></i> 提问题</a>
+                                    <div class="ui divider"></div>
+                                    <a class="item" href="{% url "blogs:drafts" %}"><i class="hide icon"></i>草稿箱</a>
+
                                 </div>
                             </div>
                         </div>
