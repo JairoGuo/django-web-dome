@@ -313,7 +313,7 @@ STATICFILES_FINDERS += ["compressor.finders.CompressorFinder"]
 MDEDITOR_CONFIGS = {
     'default': {
         'width': '100%',  # Custom edit box width
-        'height': '100%',  # Custom edit box height
+        'height': "100%",  # Custom edit box height
 
         'toolbar': ["undo", "redo", "|",
                     "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|",

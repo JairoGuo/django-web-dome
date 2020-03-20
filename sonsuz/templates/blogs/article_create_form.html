@@ -57,7 +57,7 @@
                 <br>
 
                 <div id="article-content">
-                                                        {{ form.content }}
+                    {{ form.content }}
 
 
                 </div>
@@ -78,21 +78,62 @@
 {% endblock %}
 
 {% block modal %}
-    <div class="ui  modal err small" id="err">
-
+    <div class="ui  modal err mini" id="err">
         <div class="header">
-
         </div>
-        <div class="image content">
-            <div class="image">
-                图像可以出现在左边或图标上
-            </div>
+        <div class="content">
             <div class="description">
                 描述可以出现在右边
             </div>
         </div>
         <div class="actions">
-            <div class="ui button close">确定</div>
+            <button id="close" type="button" class="ui button">确定</button>
+        </div>
+    </div>
+
+
+    <div class="ui modal" id="post-article">
+        <i class="close icon"></i>
+        <div class="header">
+            发布文章
+        </div>
+        <div class=" content">
+
+
+
+            <div class="description ui items">
+                <div class="item">
+                <span>文章分类：</span>
+                <select class="ui search dropdown">
+                    <option value="">State</option>
+                    <option value="AL">Alabama</option>
+                    <option value="AK">Alaska</option>
+                    <option value="AZ">Arizona</option>
+                </select>
+
+            </div>
+
+            <div class="item">
+                <span>文章标签：</span>
+                <div class="ui right labeled left icon input">
+                    <i class="tags icon"></i>
+                    <input type="text" placeholder="多个标签使用英文逗号(,)隔开">
+
+                </div>
+            </div>
+
+
+            </div>
+        </div>
+
+        <div class="actions">
+            <div class="ui black deny button">
+                不可以
+            </div>
+            <div class="ui positive right labeled icon button">
+                是的，那是我
+                <i class="checkmark icon"></i>
+            </div>
         </div>
     </div>
 {% endblock %}
@@ -109,29 +150,46 @@
 
     <script>
         function create_article() {
-            if ($("#title").val() ==="") {
+            if ($("#title").val() === "") {
                 {#$("#title").attr("placeholder", "请输入文章标题");#}
-                $("#err .header").text("请输入文章标题");
+                $("#err .header").text("提示");
+                $("#err .description").text("请输入文章标题");
                 f();
                 return;
+            } else {
+                post_article();
             }
 
-            $("#create-article").submit();
-
+            {#$("#create-article").submit();#}
         }
+
+
     </script>
+
+
 
     <script>
         function f() {
 
 
+            $('.ui.modal.err')
+                    .modal('show')
+            ;
+        }
 
-                $('.ui.modal.err')
+        function post_article() {
+            $('#post-article')
                     .modal('show')
             ;
 
-
-
         }
+
+
+    </script>
+
+    <script>
+        $("#close").click(function () {
+            $(".ui.modal.err").modal("hide");
+        });
     </script>
 {% endblock %}
