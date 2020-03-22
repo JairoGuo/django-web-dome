@@ -14,21 +14,13 @@
         <div class="three wide column">
             <div class="ui link items">
 
-                <div class="item">
-                    <div class="content">
-                        <div><i class="circle icon"></i>史蒂夫.费利西亚诺</div>
-                        <div class="description">
-                            <p></p>
+                {% for category in article_categories %}
+
+                    <div class="item">
+                        <div class="content">
+                            <div><i class="circle icon"></i>{{ category.catname }}</div>
                         </div>
                     </div>
-                </div>
-
-                {% for item in category %}
-                <div class="item">
-                    <div class="content">
-                        <div><i class="circle icon"></i>{{item.catname}}</div>
-                    </div>
-                </div>
                 {% endfor %}
 
             </div>
@@ -128,5 +120,6 @@
     {#    </div>#}
 {% endblock %}
 
-{% block modal %}
-{% endblock %}
+
+
+

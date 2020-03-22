@@ -28,7 +28,7 @@
                 发表于{{ article.created_at|date:"Y-m-d" }}
 
                 {% if request.user.username == article.user.username %}
-                    <a title="编辑文章">
+                    <a title="编辑文章" href="{% url "blogs:update" article.slug %}">
                         <i class="edit icon" aria-hidden="true"></i>编辑本文
                     </a>
                 {% endif %}
@@ -107,10 +107,11 @@
 
 
 {% block modal %}
+    {{ block.super }}
 {% endblock %}
 
 {% block javascript %}
-    {{ block.super }}
+
     <script src="{% static 'editor/examples/js/jquery.min.js' %}"></script>
     <script src="{% static 'editor/lib/marked.min.js' %}"></script>
     <script src="{% static 'editor/lib/prettify.min.js' %}"></script>
@@ -142,4 +143,7 @@
             });
         });
     </script>
+
+    {{ block.super }}
+
 {% endblock %}

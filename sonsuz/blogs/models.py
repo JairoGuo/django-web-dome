@@ -74,11 +74,11 @@ class Article(models.Model):
                              on_delete=models.SET_NULL, verbose_name='文章作者')
     article_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True, verbose_name="文章id")
     title = models.CharField(max_length=255, blank=False, null=False, unique=False, verbose_name='文章标题')
-    cover = models.ImageField(upload_to='blogs/covers/%Y/%m/%d/', verbose_name='文章封面')
+
     abstract = models.TextField(null=True, blank=True, verbose_name='文章摘要', default='此文章还没有摘要')
     content = MDTextField(verbose_name="文章内容")
     slug = models.SlugField(max_length=255, null=True, blank=True, verbose_name='(URL)别名')
-    tags = TaggableManager(through=UUIDTaggedItem, help_text='多个标签使用英文逗号(,)隔开', verbose_name='文章标签')
+    tags = TaggableManager(through=UUIDTaggedItem, blank=True, help_text='多个标签使用英文逗号(,)隔开', verbose_name='文章标签')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='创建时间', db_index=True)
     updated_at = models.DateTimeField(auto_now=True, verbose_name='更新时间', db_index=True)
     objects = ArticleQuerySet.as_manager()
