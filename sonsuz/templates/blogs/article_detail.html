@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {#{% load static crispy_forms_tags comments thumbnail %}#}
 {% load static crispy_forms_tags  thumbnail %}
+{% load comments %}
 
 
 {% block title %}
@@ -10,6 +11,8 @@
 {% block css %}
     {{ block.super }}
 
+
+
     <link rel="stylesheet" href="{% static 'editor/css/editormd.preview.css' %}"/>
 {% endblock %}
 
@@ -17,88 +20,116 @@
 
     <div class="ui padded grid container">
 
-        <div class="eleven wide column ui card">
-            <!-- 标题 -->
-            <h1 class="ui center aligned header">{{ article.title|title }}</h1>
-
-            <!-- 作者 -->
-            <p class="content">
-
-                <a href="{% url 'users:detail' article.user.username %}">{{ article.user.get_profile_name }}</a>
-                发表于{{ article.created_at|date:"Y-m-d" }}
-
-                {% if request.user.username == article.user.username %}
-                    <a title="编辑文章" href="{% url "blogs:update" article.slug %}">
-                        <i class="edit icon" aria-hidden="true"></i>编辑本文
-                    </a>
-                {% endif %}
-
-            </p>
-            <div class="ui divider"></div>
+        <div class="eleven wide column">
+            <div class="ui card fluid">
 
 
-            <!-- 文章内容 -->
-            <div id="test-editormd-view">
+                <!-- 标题 -->
+                <h1 class="ui center aligned header" style="margin: 15px">{{ article.title }}</h1>
+
+                <!-- 作者 -->
+                <p class="content">
+
+                    <a href="{% url 'users:detail' article.user.username %}">{{ article.user.get_profile_name }}</a>
+                    发表于{{ article.created_at|date:"Y-m-d" }}
+
+                    {% if request.user.username == article.user.username %}
+                        <a class="ui right floated" title="编辑文章" href="{% url "blogs:update" article.slug %}">
+                            <i class="edit icon" aria-hidden="true"></i>编辑本文
+                        </a>
+                    {% endif %}
+
+                </p>
+                <div class="ui divider"></div>
+
+
+                <!-- 文章内容 -->
+                <div id="test-editormd-view">
                         <textarea id="markdown-textarea" style="display:none;"
                                   name="test-editormd-markdown-doc">{{ article.content }}</textarea>
-            </div>
-            <hr/>
+                </div>
 
-            <!-- 文章评论数 -->
-            {#                {% get_comment_count for article as comment_count %}#}
-            {#                <h6>当前文章的评论数： {{ comment_count }}</h6>#}
-            {#                <hr/>#}
-            {#                <!-- 文章评论表单 -->#}
-            {#                {% render_comment_form for article %}#}
-            {#                <div class="card my-4">#}
-            {#                    <h5 class="card-header">评论</h5>#}
-            {#                    <div class="card-body">#}
-            {#                        {% if request.user.is_authenticated %}#}
-            {#                            {% get_comment_form for article as form %}#}
-            {#                            <form action="{% comment_form_target %}" method="POST">#}
-            {#                                {% csrf_token %}#}
-            {#                                {{ form|crispy }}#}
-            {#                                <div id="id_comment" class="form-group">#}
-            {#                                    <textarea id="comment" name="comment" class="form-control"#}
-            {#                                              maxlength="250" rows="5"></textarea>#}
-            {#                                </div>#}
-            {#                                {{ form.content_type }}#}
-            {#                                {{ form.object_pk }}#}
-            {#                                {{ form.timestamp }}#}
-            {#                                {{ form.security_hash }}#}
-            {#                                <input type="hidden" name="next" value="{% url 'blogs:detail' article.slug %}"/>#}
-            {#                                <input class="btn btn-info" type="submit" value="提交" id="id_submit"/>#}
-            {#                            </form>#}
-            {#                        {% else %}#}
-            {#                            <p>请登录后发表评论！</p>#}
-            {#                        {% endif %}#}
-            {#                    </div>#}
-            {#                </div>#}
-            {#                <hr/>#}
-            {#                <!--评论列表-->#}
-            {#                {% get_comment_list for article as comment_list %}#}
-            {#                {% for comment in comment_list %}#}
-            {#                    <div class="media mb-4">#}
-            {#                        {% thumbnail comment.user.avatar "x50" as im %}#}
-            {#                            <img class="d-flex mr-3 rounded-circle" src="{{ im.url }}" alt="用户头像" id="pic"/>#}
-            {#                        {% empty %}#}
-            {#                            <img class="d-flex mr-3 rounded-circle" src="{% static 'img/user.png' %}" height="50px"#}
-            {#                                 alt="没有头像"/>#}
-            {#                        {% endthumbnail %}#}
-            {#                        <div class="media-body">#}
-            {#                            <h5 class="mt-0">{{ comment.user.get_profile_name }}</h5>#}
-            {#                            {{ comment.comment }}#}
-            {#                        </div>#}
-            {#                    </div>#}
-            {#                {% endfor %}#}
+
+                <!--评论列表-->
+                <div class="ui comments padded container fluid" style="padding: 15px">
+                    <div class="ui dividing header">评论
+                        <!-- 文章评论数 -->
+                        {% get_comment_count for article as comment_count %}
+                        <span class="ui right floated" style="font-size: 14px; color: #6a9fb5">
+                            当前文章的评论数： {{ comment_count }}
+                        </span>
+                    </div>
+
+                    {% get_comment_list for article as comment_list %}
+                    {% for comment in comment_list %}
+                        <div class="comment">
+                            <a class="avatar">
+                                {% thumbnail comment.user.avatar "x50" as im %}
+                                    <img src="{{ im.url }}" alt="用户头像" id="pic"/>
+                                {% empty %}
+                                    <img src="{% static 'images/user.png' %}"
+                                         alt="没有头像"/>
+                                {% endthumbnail %}
+                            </a>
+                            <div class="content">
+                                <a class="author">{{ comment.user.get_profile_name }}</a>
+                                <div class="metadata">
+                                    <span class="date">{{ comment.submit_date }}</span>
+                                </div>
+                                <div class="text">{{ comment.comment }}</div>
+                                <div class="actions">
+                                    <a class="reply">回复</a>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    {% endfor %}
+
+
+
+                    <!-- 文章评论表单 -->
+                    {#            {% render_comment_form for article %}#}
+                    {% if request.user.is_authenticated %}
+                        {% get_comment_form for article as form %}
+
+                        <form class="ui reply form" method="post" action="{% comment_form_target %}">
+                            {% csrf_token %}
+                            {#                            {{ form|crispy }}#}
+
+                            <div id="id_comment" class="field">
+                                <textarea id="comment" name="comment"></textarea>
+                            </div>
+
+                            {{ form.content_type }}
+                            {{ form.object_pk }}
+                            {{ form.timestamp }}
+                            {{ form.security_hash }}
+
+                            <input type="hidden" name="next" value="{% url 'blogs:detail' article.slug %}"/>
+
+                            <button type="submit" id="id_submit" value="提交"
+                                    class="ui blue labeled submit icon button">
+                                <i class="icon send"></i>发表
+                            </button>
+                        </form>
+
+                    {% else %}
+                        <p>请登录后发表评论！</p>
+                    {% endif %}
+
+                </div>
+
+
+            </div>
         </div>
 
 
         <div class="four wide column ">
             <!-- 文章目录 -->
-            <div class="ui header">文章目录</div>
-            <div class="ui card">
-                <div id="custom-toc-container"></div>
+            <div class="ui card" style="padding: 15px">
+                <div class="ui header">文章目录</div>
+                <div class="ui fluid container" id="custom-toc-container"></div>
             </div>
         </div>
 

@@ -28,19 +28,6 @@
         <div class="extra">
 
 
-
-
-{#            {% if news.replies_count == 0 %}#}
-{#                <a class="ui right floated" id="news-comment"><i class="comment outline icon"#}
-{#                                                                 id="news-reply-count-icon"></i><span#}
-{#                        id="news-reply-count">{{ news.replies_count }}</span></a>#}
-{#            {% else %}#}
-{#                <a class="ui right floated" id="news-comment"><i class="comment inline icon"></i><span#}
-{#                        id="news-reply-count">{{ news.replies_count }}</span></a>#}
-{#            {% endif %}#}
-            {#                        <a class="ui right floated"><i class="heart icon"></i>{{ news.likers_count }}</a>#}
-{##}
-
             {% thumbnail article.user.avatar "x25" as im %}
                 <a href="{% url 'users:detail' article.user.username %}">
                                 <img class="ui avatar image" src="{{ im.url }}"><spqn>{{ article.user.get_profile_name }}</spqn>

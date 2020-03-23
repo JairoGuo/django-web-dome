@@ -56,9 +56,12 @@ class ArticleQuerySet(models.query.QuerySet):
 
 
 class UUIDTaggedItem(GenericUUIDTaggedItemBase, TaggedItemBase):
+
     # If you only inherit GenericUUIDTaggedItemBase, you need to define
     # a tag field. e.g.
     # tag = models.ForeignKey(Tag, related_name="uuid_tagged_items", on_delete=models.CASCADE)
+
+
 
     class Meta:
         verbose_name = _("Tag")
@@ -67,7 +70,7 @@ class UUIDTaggedItem(GenericUUIDTaggedItemBase, TaggedItemBase):
 
 class Article(models.Model):
     STATUS = (("D", "Draft"), ("P", "Published"))
-    status = models.CharField(max_length=1, choices=STATUS, default='D', verbose_name='文章状态')  # 默认存入草稿箱
+    status = models.CharField(max_length=1, choices=STATUS,blank=True, default='D', verbose_name='文章状态')  # 默认存入草稿箱
     category = models.ForeignKey(ArticleCategory, verbose_name="文章类别", null=True,
                                  blank=True, on_delete=models.SET_NULL)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, related_name="articles",

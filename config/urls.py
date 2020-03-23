@@ -19,13 +19,14 @@ urlpatterns = [
     path("users/", include("sonsuz.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
 
-    # app management
+    # app 路由
     path("news/", include("sonsuz.news.urls", namespace="news")),
     path("blogs/", include("sonsuz.blogs.urls", namespace="blogs")),
 
     # 第三方路由
     # url(r'mdeditor/', include('mdeditor.urls')),
     re_path(r'mdeditor/', include('mdeditor.urls')),
+    re_path(r'^comments/', include('django_comments.urls')),
 
                   # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

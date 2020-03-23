@@ -2,37 +2,223 @@
 {% load static crispy_forms_tags %}
 
 {% block title %}
-    更新文章 | {{ block.super }}
+    编辑文章 | {{ block.super }}
 {% endblock %}
 
 {% block css %}
+    {{ block.super }}
+
     {{ form.media }}
 {% endblock %}
 
-{% block content %}
-    <div class="container">
-        <div class="row">
-            <form role="form" method="post" enctype="multipart/form-data"
-                  id="articleForm" action="{% url 'blogs:update' form.instance.pk %}" style="width: 100%">
-                {% csrf_token %}
-                {{ form|crispy }}
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary publish">发表文章</button>
-                    {#                    <button type="button" class="btn btn-default draft">保存草稿</button>#}
-                    <a class="btn btn-light" style="float:right" href="{% url 'blogs:list' %}">取消</a>
+{% block bar %}
+    <div class="ui center aligned ">
+
+        <div class="ui container ">
+            <div class="ui secondary icon menu">
+
+                <a class="item" href="{% url 'blogs:list' %}">
+                    <i class="reply big icon"></i>
+                </a>
+
+                <div class="item">
+                    <h1 class="center aligned">编辑文章</h1>
                 </div>
-            </form>
+
+                <div class="right item">
+                    <div class="ui buttons">
+                        <button onclick="f1('D')" class="ui button">保存草稿</button>
+                        <div class="or"></div>
+                        <button class="positive ui button" onclick="create_article()">发表</button>
+                    </div>
+                </div>
+            </div>
+
         </div>
+
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="ui fluid container">
+
+        <form role="form" method="post" enctype="multipart/form-data"
+              action="{% url 'blogs:create' %}"
+              id="articleForm">
+
+            {% csrf_token %}
+
+            {#                       {{ form|crispy }}#}
+
+            <div class="ui fluid icon input">
+                {{ form.title }}
+            </div>
+            <br>
+            <div id="article-content">
+                {{ form.content }}
+            </div>
+
+        </form>
+
     </div>
 {% endblock %}
 
 {% block modal %}
+
+    <div class="ui  modal err mini" id="err">
+        <div class="header">
+        </div>
+        <div class="content">
+            <div class="description">
+                描述可以出现在右边
+            </div>
+        </div>
+        <div class="actions">
+            <button id="close" type="button" class="ui button">确定</button>
+        </div>
+    </div>
+
+    <div class="ui modal" id="post-article">
+        <i class="close icon"></i>
+        <div class="header">
+            发布文章
+        </div>
+
+
+        <div class=" content">
+
+            <form id="article11" role="form" method="post">
+
+                <div class="description ui items">
+                    {% csrf_token %}
+                    <div class="item">
+                        <span>文章分类：</span>
+                        {{ form.category }}
+                    </div>
+
+                    <div class="item">
+                        <span>文章标签：</span>
+                        <div class="ui right labeled left icon input">
+                            <i class="tags icon"></i>
+                            {{ form.tags }}
+                        </div>
+                    </div>
+
+                    <div>
+
+                        <span>文章摘要：</span>
+
+                        <div class="ui reply form item">
+                            <div class="field">
+                                {{ form.abstract }}
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </form>
+        </div>
+        <div class="actions">
+            <button href="{% url 'blogs:list' %}" class="ui black deny button">
+                取消
+            </button>
+            <button onclick="f1('P')" class="ui positive right labeled icon button">
+                发布
+                <i class="checkmark icon"></i>
+            </button>
+        </div>
+
+    </div>
+
+
+    {{ block.super }}
 {% endblock %}
 
 {% block javascript %}
-{#    <script>#}
-{#        $(function () {#}
-{#          #}
-{#        });#}
-{#    </script>#}
+
+    <script>
+
+        let tag_list = new Array()
+        {% for tag in article.tags.names %}
+            tag_list.push("{{ tag }}")
+        {% endfor %}
+        $("#id_tags").val(tag_list.join(","))
+
+    </script>
+
+    <script>
+        function create_article() {
+
+            if ($("#id_title").val() === "") {
+                {#$("#title").attr("placeholder", "请输入文章标题");#}
+                $("#err .header").text("提示");
+                $("#err .description").text("请输入文章标题");
+                f();
+                return;
+            } else {
+                post_article();
+            }
+
+        }
+
+    </script>
+
+
+    <script>
+        function f() {
+
+            $('.ui.modal.err')
+                    .modal('show')
+            ;
+        }
+
+        function post_article() {
+            $('#post-article')
+                    .modal('show')
+            ;
+
+        }
+
+
+    </script>
+
+    <script>
+        $("#close").click(function () {
+            $(".ui.modal.err").modal("hide");
+        });
+    </script>
+
+    <script>
+
+        function f1() {
+
+
+            $.ajax({
+                url: '{% url 'blogs:update' form.instance.pk %}',
+                data: $("#articleForm").serialize() + $("#article11").serialize(),
+                type: 'POST',
+                async: false,
+                cache: false,
+                success: function (data) {
+
+
+                    {#window.location.href = "{% url "blogs:list" %}"#}
+                    window.location.replace("{% url "blogs:list" %}")
+
+                },
+                error: function (data) {
+                    alert(data.responseText);
+                },
+            });
+
+
+            {#document.getElementById("articleForm").submit();#}
+        }
+    </script>
+
+    {{ block.super }}
+
 {% endblock %}

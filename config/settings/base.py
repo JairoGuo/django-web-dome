@@ -78,7 +78,8 @@ THIRD_PARTY_APPS = [
     "django_celery_beat",
     "sorl.thumbnail",
     "taggit",
-    "mdeditor"
+    "mdeditor",
+    "django_comments"
 ]
 
 LOCAL_APPS = [

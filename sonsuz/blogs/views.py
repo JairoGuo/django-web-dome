@@ -1,5 +1,5 @@
 import http
-from typing import Any
+from typing import Any, Optional
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -8,7 +8,7 @@ from django.http import HttpResponse, HttpRequest, request
 from django.urls import reverse, reverse_lazy
 # from django.utils.decorators import method_decorator
 # from django.views.decorators.cache import cache_page
-from django.views.generic import ListView, CreateView, DetailView, UpdateView
+from django.views.generic import ListView, CreateView, DetailView, UpdateView, RedirectView
 #
 # from django_comments.signals import comment_was_posted
 #
@@ -25,6 +25,7 @@ class ArticleListView(ListView):
     paginate_by = 5
     context_object_name = 'article_list'
     template_name = "blogs/article_list.html"
+
 
     def get_queryset(self, **kwargs):
         return Article.objects.get_published()
@@ -52,24 +53,18 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
     template_name = "blogs/article_create_form.html"
 
 
-    def form_valid(self, form):
-
-        form.instance.user = self.request.user
-        form.instance.status = 'P'
-
-        # form.instance.abstract = self.request.POST["abstract"]
-        # form.instance.tags = self.request.POST["tags"]
-        # form.instance.category = ArticleCategory.objects.get(pk=eval(self.request.POST["category"][0]))
-
-        print(self.request.POST)
-
-        return super(ArticleCreateView, self).form_valid(form)
-
-    # success_url = reverse_lazy('blogs:list')
     def get_success_url(self):
         message = "您的文章已创建成功！"  # Django框架中的消息闪现机制
         messages.success(self.request, message)  # 消息传递给下一次请求
+
         return reverse_lazy('blogs:list')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        # form.instance.status = 'P'
+        return super(ArticleCreateView, self).form_valid(form)
+
+    # success_url = reverse_lazy('blogs:list')
 
 
 class ArticleDetailView(DetailView):
@@ -91,31 +86,22 @@ class ArticleUpdateView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
     template_name_suffix = '_update_form'
     template_name = "blogs/article_update_form.html"
 
-    category = None
-    tags = None
-    abstract = None
 
 
-    def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
-        category = request.POST['category'].strip()
-        tags = request.POST['tags'].strip()
-        abstract = request.POST['abstract'].strip()
+
+    def get_success_url(self):
+        message = "您的文章已更新成功！"  # Django框架中的消息闪现机制
+        messages.success(self.request, message)  # 消息传递给下一次请求
+        return reverse_lazy('blogs:detail', kwargs={'slug': self.get_object().slug})
 
 
     def form_valid(self, form):
-        global category
-        global tags
-        global abstract
-        print(category, tags, abstract)
 
         form.instance.user = self.request.user
         return super(ArticleUpdateView,self).form_valid(form)
 
     # success_url = reverse_lazy('blogs:list')
-    def get_success_url(self):
-        message = "您的文章已更新成功！"  # Django框架中的消息闪现机制
-        messages.success(self.request, message)  # 消息传递给下一次请求
-        return reverse_lazy('blogs:detail', kwargs={'slug': self.get_object().slug})
+
 
 
 # def comment_notify(**kwargs):

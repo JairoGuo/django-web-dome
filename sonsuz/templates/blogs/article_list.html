@@ -12,13 +12,15 @@
 
 
         <div class="three wide column">
+
+            <div class="ui horizontal divider ">频道</div>
+
             <div class="ui link items">
 
                 {% for category in article_categories %}
-
                     <div class="item">
                         <div class="content">
-                            <div><i class="circle icon"></i>{{ category.catname }}</div>
+                            <div><i class="tag icon"></i>{{ category.catname }}</div>
                         </div>
                     </div>
                 {% endfor %}

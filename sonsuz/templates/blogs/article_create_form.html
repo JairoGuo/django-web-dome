@@ -27,7 +27,7 @@
 
                 <div class="right item">
                     <div class="ui buttons">
-                        <button class="ui button">保存草稿</button>
+                        <button onclick="f1('D')" class="ui button">保存草稿</button>
                         <div class="or"></div>
                         <button class="positive ui button" onclick="create_article()">发表</button>
                     </div>
@@ -58,7 +58,6 @@
                 {{ form.content }}
             </div>
 
-            <button class="ui button" id="submit-article" hidden type="submit">submit</button>
         </form>
 
     </div>
@@ -79,8 +78,7 @@
         </div>
     </div>
 
-
-    <div class="ui modal" id="post-article">
+                <div class="ui modal" id="post-article">
         <i class="close icon"></i>
         <div class="header">
             发布文章
@@ -89,7 +87,7 @@
 
         <div class=" content">
 
-            <form id="article11" role="form" action="#" method="post">
+            <form id="article11"  role="form" method="post">
 
                 <div class="description ui items">
                     {% csrf_token %}
@@ -102,7 +100,7 @@
                         <span>文章标签：</span>
                         <div class="ui right labeled left icon input">
                             <i class="tags icon"></i>
-                            <input type="text" name="tags" placeholder="多个标签使用英文逗号(,)隔开">
+                            {{ form.tags }}
                         </div>
                     </div>
 
@@ -112,8 +110,8 @@
 
                         <div class="ui reply form item">
                             <div class="field">
-{#                                {{ form.abstract }}#}
-                                <textarea name="abstract"></textarea>
+                                {{ form.abstract }}
+
                             </div>
                         </div>
 
@@ -121,19 +119,21 @@
 
 
                 </div>
+
             </form>
         </div>
         <div class="actions">
-            <div class="ui black deny button">
+            <button href="{% url 'blogs:list' %}" class="ui black deny button">
                 取消
-            </div>
-            <button onclick="f1()" class="ui positive right labeled icon button">
+            </button>
+            <button onclick="f1('P')" class="ui positive right labeled icon button">
                 发布
                 <i class="checkmark icon"></i>
             </button>
         </div>
 
     </div>
+
 
     {{ block.super }}
 {% endblock %}
@@ -154,7 +154,6 @@
             }
 
         }
-
 
     </script>
 
@@ -185,30 +184,30 @@
 
     <script>
 
-        function f1() {
+        function f1(status) {
 
+            if (status === "P") {
 
+                $.ajax({
+                    url: '{% url "blogs:create" %}',
+                    data: $("#articleForm").serialize() + $("#article11").serialize() + "&status=P",
+                    type: 'POST',
+                    async: false,
+                    cache: false,
+                    success: function (data) {
 
+                        {#window.location.href = "{% url "blogs:list" %}"#}
+                        window.location.replace("{% url "blogs:list" %}")
+                        // hide_stream_update();
+                    },
+                    error: function (data) {
+                        alert(data.responseText);
+                    },
+                });
+            } else {
+                document.getElementById("articleForm").submit();
+            }
 
-
-            {#alert($("#articleForm").serialize() + $("#submit-article").serialize());#}
-            $.ajax({
-                url: '{% url "blogs:create" %}',
-                data: $("#articleForm").serialize()+$("#article11").serialize(),
-                type: 'POST',
-                cache: false,
-                success: function (data) {
-                    alert("ok");
-                    // hide_stream_update();
-                },
-                error: function (data) {
-                    alert(data.responseText);
-                },
-             });
-            {#document.getElementById("articleForm").submit();#}
-
-            {#$("#submit-article").click()#}
-            {#$("#articleForm").submit();#}
 
         }
     </script>
