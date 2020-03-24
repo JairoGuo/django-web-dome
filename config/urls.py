@@ -22,6 +22,8 @@ urlpatterns = [
     # app 路由
     path("news/", include("sonsuz.news.urls", namespace="news")),
     path("blogs/", include("sonsuz.blogs.urls", namespace="blogs")),
+    path("quora/", include("sonsuz.quora.urls", namespace="quora")),
+
 
     # 第三方路由
     # url(r'mdeditor/', include('mdeditor.urls')),
