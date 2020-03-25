@@ -1,0 +1,60 @@
+<div class="ui card fluid">
+    <div class="content">
+        <div class="description">
+
+            <div class="ui grid fluid container">
+
+                <div class="three wide column row equal width ui middle aligned">
+
+                        <div class="column ">
+                            <div class="ui  mini statistic
+                                {% if question.has_correct %}
+                                    green card
+                                {% endif %}">
+                                <div class="value">{{ question.count_answers }}</div>
+                                <div class="label">回答</div>
+                            </div>
+                        </div>
+
+                        <div class="column">
+                            <div class="ui mini statistic">
+                                <div class="value">{{ question.total_votes }}</div>
+                                <div class="label">投票</div>
+                            </div>
+                        </div>
+
+                        <div class="column">
+                            <div class="ui mini statistic">
+                                <div class="value">{{ question.clicknum }}</div>
+                                <div class="label">浏览</div>
+                            </div>
+                        </div>
+
+
+                </div>
+
+                <div class="thirteen wide column">
+
+                    <div class="ui header"><a href="{% url 'quora:question_detail' question.pk question.slug %}">{{ question.title|title }}</a></div>
+
+                    <span>
+                    {% if question.tags.names %}
+                        {% for tag in question.tags.names %}
+                            <span class="ui green label mini">{{ tag }}</span>
+                        {% endfor %}
+                    {% endif %}
+                    </span>
+                    <span class="question-user right floated">
+                        <a href="{% url 'users:detail' question.user.username %}">{{ question.user.get_profile_name }} </a>
+                        <span class="text-secondary"> {{ question.created_at|timesince }}之前提问</span>
+                    </span>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+</div>

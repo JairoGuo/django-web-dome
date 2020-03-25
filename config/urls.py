@@ -11,7 +11,7 @@ urlpatterns = [
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
     path("about/", TemplateView.as_view(template_name="pages/about.html"), name="about"),
     # path("news/", TemplateView.as_view(template_name="pages/news.html"), name="news"),
-    path("quora/", TemplateView.as_view(template_name="pages/quora.html"), name="quora"),
+    # path("quora/", TemplateView.as_view(template_name="pages/quora.html"), name="quora"),
     path("chat/", TemplateView.as_view(template_name="pages/chat.html"), name="chat"),
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
@@ -29,6 +29,7 @@ urlpatterns = [
     # url(r'mdeditor/', include('mdeditor.urls')),
     re_path(r'mdeditor/', include('mdeditor.urls')),
     re_path(r'^comments/', include('django_comments.urls')),
+    re_path(r'^markdownx/', include('markdownx.urls')),
 
                   # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

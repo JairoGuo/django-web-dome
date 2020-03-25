@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static crispy_forms_tags %}
+
+{% block title %}
+    提问题 | {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {{ form.media }}
+        <form enctype="multipart/form-data" id="question-form" method="post" role="form"
+              action="{% url 'quora:ask_question' %}">
+            {% csrf_token %}
+            {#            {{ form|crispy }}#}
+
+            <div class="ui input fluid">
+                {{ form.title }}
+            </div>
+            <br>
+            <div>
+                {{ form.status }}
+            </div>
+            <br>
+            <div class="ui input fluid">
+                {{ form.tags }}
+            </div>
+            <br>
+            <br>
+            <div class="ui reply form ">
+                {{ form.content }}
+            </div>
+            <br>
+
+            <button type="submit" class="ui blue labeled icon button" >
+                <i class="icon send"></i>提交
+            </button>
+
+            <a href="{% url 'quora:all-questions' %}" class="ui red button">
+                取消
+            </a>
+
+        </form>
+    </div>
+{% endblock %}
+
+
+
