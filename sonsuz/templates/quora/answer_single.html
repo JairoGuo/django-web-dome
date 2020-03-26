@@ -1,0 +1,54 @@
+{% load static humanize thumbnail %}
+
+<div class="item" answer-id="{{ answer.pk }}">
+    {% csrf_token %}
+
+    <div class="content">
+
+        <div class="avatar">
+            {% thumbnail answer.user.avatar "x50" as im %}
+                <img src="{{ im.url }}" class="ui avatar image" alt="用户头像">
+            {% empty %}
+                <img src="{% static 'images/user.png' %}" class="ui avatar image" alt="没有头像"/>
+            {% endthumbnail %}
+
+            <a href="{% url 'users:detail' answer.user.username %}"
+               class="username">{{ answer.user.get_profile_name }}</a>
+        </div>
+
+
+        <div class="meta">
+            <span class="ui mini">回答于 {{ answer.created_at|naturaltime }}</span>
+        </div>
+        <div class="description">
+
+            {{ answer.get_markdown|safe }}
+
+        </div>
+        <div class="ui container">
+
+            <div class="ui  buttons">
+                    <button class="ui positive basic button">
+                        <i class="thumbs up outline icon"></i>赞
+                    </button>
+
+                    <button class="ui grey basic button">
+                        <i class="thumbs down outline icon"></i>踩
+
+                    </button>
+                </div>
+
+            <!--自己提的问题显示是否接受回答的按钮-->
+            {% if answer.is_accepted %}
+                <div class="ui green button" title="此回答已被采纳">
+                    <i class="icon check" ></i>已采纳
+                </div>
+            {% elif not answer.is_accepted and request.user.username == question.user.username %}
+                <button class="ui button" title="点击采纳回答">
+                    <i id="acceptAnswer-{{ answer.pk }}" class="icon check"></i>采纳
+                </button>
+
+            {% endif %}
+        </div>
+    </div>
+</div>

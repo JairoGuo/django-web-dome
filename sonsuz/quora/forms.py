@@ -7,13 +7,14 @@ from sonsuz.quora.models import Question
 
 
 class QuestionForm(ModelForm):
-    content = MarkdownxFormField()
 
+    # content = MarkdownxFormField()
     class Meta:
         model = Question
-        fields = ["title", "status", "tags"]
+        fields = ["title", "status", "tags", "content"]
         widgets = {
             "title": forms.TextInput(attrs={"placeholder": "问题标题"}),
             "status": forms.Select(attrs={"class": "ui search dropdown"}),
-            "tags": forms.TextInput(attrs={'placeholder': '多个标签使用英文逗号(,)隔开'})
+            "tags": forms.TextInput(attrs={'placeholder': '多个标签使用英文逗号(,)隔开'}),
+            "content": MarkdownxFormField()
         }
