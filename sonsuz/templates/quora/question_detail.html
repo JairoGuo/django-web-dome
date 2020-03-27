@@ -18,12 +18,11 @@
         <h2 class="ui header">
             {{ question.title }}
             <a href="{% url 'quora:ask_question' %}" class="ui button right floated">
-                <i class="fa fa-pencil" aria-hidden="true"></i> 提问
+                <i class="" aria-hidden="true"></i> 提问
             </a>
 
             <div>
                 {% if question.tags.names %}
-
                     {% for tag in question.tags.names %}
                         <span class="ui label">{{ tag }}</span>
                     {% endfor %}
@@ -34,7 +33,7 @@
 
         <div class="ui divider"></div>
 
-        <div class="content" question-id="{{ question.pk }}">
+        <div class="content" id="question-content" question-id="{{ question.pk }}">
             <div class="">
                 <p>{{ question.get_markdown|safe }}</p>
 
@@ -45,20 +44,20 @@
             <br>
             <div class="">
 
+                <div class="ui buttons">
 
-                <div class="ui  buttons">
-
-                    <button class="ui positive basic button">
+                    <button class="ui up positive button question-vote {% if request.user not in question.get_upvoters %}basic{% endif %}">
                         <i class="thumbs up outline icon"></i>赞
                         <span>
-                            {% if question.total_votes != 0 %}
-                                {{ question.total_votes }}
-                            {% endif %}
+
+                            <span id="questionVotes-u">{{ question.total_votes.0 }}</span>
+
                         </span>
                     </button>
 
-                    <button class="ui grey basic button">
+                    <button class="ui grey down button question-vote {% if request.user not in question.get_downvoters %}basic{% endif %}">
                         <i class="thumbs down outline icon"></i>踩
+                        <span id="questionVotes-d">{{ question.total_votes.1 }}</span>
                     </button>
 
                 </div>
@@ -95,7 +94,7 @@
 {% endblock %}
 
 {% block javascript %}
-    <script src="{% static 'js/quora.js' %}" type="text/javascript"></script>
     {{ block.super }}
+    <script src="{% static 'js/quora.js' %}" type="text/javascript"></script>
 {% endblock %}
 

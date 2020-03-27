@@ -1,6 +1,6 @@
 {% load static humanize thumbnail %}
 
-<div class="item" answer-id="{{ answer.pk }}">
+<div class="item" id="answer-content" answer-id="{{ answer.pk }}">
     {% csrf_token %}
 
     <div class="content">
@@ -28,20 +28,23 @@
         <div class="ui container">
 
             <div class="ui  buttons">
-                    <button class="ui positive basic button">
-                        <i class="thumbs up outline icon"></i>赞
-                    </button>
+                <button class="ui positive up answer-vote button {% if request.user not in answer.get_upvoters %}basic{% endif %}  ">
+                    <i class="thumbs up outline icon"></i>赞
+                    <span id="answerVotesU-{{ answer.pk }}" class="votes">{{ answer.total_votes.0 }}</span>
 
-                    <button class="ui grey basic button">
-                        <i class="thumbs down outline icon"></i>踩
+                </button>
 
-                    </button>
-                </div>
+                <button class="ui grey answer-vote down  button {% if request.user not in answer.get_downvoters %}basic{% endif %}">
+                    <i class="thumbs down outline icon"></i>踩
+                    <span id="answerVotesD-{{ answer.pk }}" class="votes">{{ answer.total_votes.1 }}</span>
+
+                </button>
+            </div>
 
             <!--自己提的问题显示是否接受回答的按钮-->
             {% if answer.is_accepted %}
                 <div class="ui green button" title="此回答已被采纳">
-                    <i class="icon check" ></i>已采纳
+                    <i class="icon check"></i>已采纳
                 </div>
             {% elif not answer.is_accepted and request.user.username == question.user.username %}
                 <button class="ui button" title="点击采纳回答">

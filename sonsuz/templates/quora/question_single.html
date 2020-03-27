@@ -18,7 +18,7 @@
 
                         <div class="column">
                             <div class="ui mini statistic">
-                                <div class="value">{{ question.total_votes }}</div>
+                                <div class="value">{{ question.ratio_votes }}</div>
                                 <div class="label">投票</div>
                             </div>
                         </div>
@@ -35,7 +35,11 @@
 
                 <div class="thirteen wide column">
 
-                    <div class="ui header"><a href="{% url 'quora:question_detail' question.pk question.slug %}">{{ question.title|title }}</a></div>
+                    <div class="ui header">
+                        <a href="{% url 'quora:question_detail' question.pk question.slug %}">
+                            {{ question.title|title }}
+                        </a>
+                    </div>
 
                     <span>
                     {% if question.tags.names %}
