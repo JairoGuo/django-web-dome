@@ -12,7 +12,7 @@ urlpatterns = [
     path("about/", TemplateView.as_view(template_name="pages/about.html"), name="about"),
     # path("news/", TemplateView.as_view(template_name="pages/news.html"), name="news"),
     # path("quora/", TemplateView.as_view(template_name="pages/quora.html"), name="quora"),
-    path("chat/", TemplateView.as_view(template_name="pages/chat.html"), name="chat"),
+    # path("chat/", TemplateView.as_view(template_name="pages/chat.html"), name="chat"),
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
     # User management
@@ -23,6 +23,7 @@ urlpatterns = [
     path("news/", include("sonsuz.news.urls", namespace="news")),
     path("blogs/", include("sonsuz.blogs.urls", namespace="blogs")),
     path("quora/", include("sonsuz.quora.urls", namespace="quora")),
+    path("chat/", include("sonsuz.chat.urls", namespace="chat")),
 
 
     # 第三方路由

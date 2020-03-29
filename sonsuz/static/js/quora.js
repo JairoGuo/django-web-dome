@@ -121,8 +121,10 @@ $(function () {
 
     $(".acceptAnswer").click(function () {
         // Mark an answer as accepted.
+
         var span = $(this);
-        var answerId = $(this).closest(".answer").attr("answer-id");
+        var answerId = $(this).closest("#answer-content").attr("answer-id");
+
         $.ajax({
             url: '/quora/accept-answer/',
             data: {
@@ -131,9 +133,12 @@ $(function () {
             type: 'post',
             cache: false,
             success: function (data) {
-                $("#acceptAnswer-" + answerId).removeClass("accepted");
-                $("#acceptAnswer-" + answerId).prop("title", "点击接受回答");
-                $("#acceptAnswer-" + answerId).addClass("accepted");
+                $(".acceptAnswer").removeClass("green");
+                $(".acceptAnswer .cnt").text("采纳");
+                $(".acceptAnswer").prop("title", "点击采纳回答");
+
+                $("#acceptAnswer-" + answerId + " .cnt").text("已采纳");
+                $("#acceptAnswer-" + answerId).addClass("green");
                 $("#acceptAnswer-" + answerId).prop("title", "该回答已被采纳");
             }
         });

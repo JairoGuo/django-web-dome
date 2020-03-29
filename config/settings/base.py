@@ -80,7 +80,8 @@ THIRD_PARTY_APPS = [
     "taggit",
     "mdeditor",
     "django_comments",
-    "markdownx"
+    "markdownx",
+    "channels"
 ]
 
 LOCAL_APPS = [
@@ -88,6 +89,7 @@ LOCAL_APPS = [
     "sonsuz.news.apps.NewsConfig",
     "sonsuz.blogs.apps.BlogsConfig",
     "sonsuz.quora.apps.QuoraConfig",
+    "sonsuz.chat.apps.ChatConfig"
 
 
     # Your stuff: custom apps go here
@@ -343,4 +345,13 @@ MDEDITOR_CONFIGS = {
         'lineNumbers': False  # lineNumbers
     }
 
+}
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [f'{env("REDIS_URL", default="redis://127.0.0.1:6379")}/3', ],  # channel layers缓存使用Redis 3
+        },
+    },
 }

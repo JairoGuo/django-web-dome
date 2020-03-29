@@ -22,7 +22,13 @@
         </div>
         <div class="description">
 
-            {{ answer.get_markdown|safe }}
+            <div id="test-editormd-view">
+                <textarea id="markdown-textarea" style="display:none;"
+                                  name="test-editormd-markdown-doc">{{ answer.content }}
+                </textarea>
+            </div>
+
+            {#            {{ answer.get_markdown|safe }}#}
 
         </div>
         <div class="ui container">
@@ -43,12 +49,12 @@
 
             <!--自己提的问题显示是否接受回答的按钮-->
             {% if answer.is_accepted %}
-                <div class="ui green button" title="此回答已被采纳">
-                    <i class="icon check"></i>已采纳
+                <div id="acceptAnswer-{{ answer.pk }}" class="ui green button acceptAnswer" title="此回答已被采纳">
+                    <i class="icon check"></i><span class="cnt">已采纳</span>
                 </div>
             {% elif not answer.is_accepted and request.user.username == question.user.username %}
-                <button class="ui button" title="点击采纳回答">
-                    <i id="acceptAnswer-{{ answer.pk }}" class="icon check"></i>采纳
+                <button id="acceptAnswer-{{ answer.pk }}" class="ui button acceptAnswer" title="点击采纳回答">
+                    <i class="icon check"></i><span class="cnt">采纳</span>
                 </button>
 
             {% endif %}
