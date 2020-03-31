@@ -6,48 +6,68 @@
 {% block css %}
     {{ block.super }}
     <link href="{% static 'css/chat.css' %}" rel="stylesheet">
-                            <link href="{% static 'bootstrap/css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'bootstrap/css/bootstrap.css' %}" rel="stylesheet">
 
 {% endblock css %}
 
 {% block content %}
 
-    <div class="page-header">
-        <h4>{{ request.user.get_profile_name }}的聊天记录</h4>
+    <div class="ui header">
+        {{ request.user.get_profile_name }}的聊天记录
     </div>
-    <div class="row">
-        <div class="col-md-3">
-            {% for user in users_list %}
-                <a href="{% url 'chat:conversation_detail' user.username %}"
-                   class="list-group-item list-group-item-action {% if active_user == user.username %}active{% endif %}">
-                    {% thumbnail user.avatar "x45" as im %}
-                        <img src="{{ im.url }}" alt="用户头像">
+    <div class="ui grid container">
+        <div class="four wide column">
+
+            <div class="messages-list ui middle aligned selection animated list card"
+                 style="background-color: #3D3D3D;">
+
+                {% for user in users_list %}
+
+                    <a href="{% url 'chat:conversation_detail' user.username %}"
+                       class="item {% if active_user == user.username %} active {% endif %}">
+                        {% thumbnail user.avatar "x45" as im %}
+                            <img class="ui avatar image" src="{{ im.url }}" alt="用户头像">
                         {% empty %}
-                        <img src="{% static 'images/user.png' %}" height="45px" alt="没有头像"/>
-                    {% endthumbnail %}
-                    {{ user.get_profile_name }}
-                </a>
-            {% endfor %}
+                            <img class="ui avatar image" src="{% static 'images/user.png' %}" height="45px" alt="没有头像"/>
+                        {% endthumbnail %}
+                        <div class="content">
+                            <div class="header" style=" color: #fff;">{{ user.get_profile_name }}</div>
+                        </div>
+                    </a>
+
+                {% endfor %}
+
+
+            </div>
+
         </div>
-        <div class="col-md-9">
-            <div class="messages-list">
+
+
+        <div class="twelve wide column">
+            <div class="messages-list ui card fluid">
                 {% if message_list %}
                     {% for message in message_list %}
                         {% include 'chat/message_single.html' with message=message %}
                     {% endfor %}
                 {% else %}
-                    <p>没有聊天记录</p>
+                    <div class="ui center middle aligned">没有聊天记录</div>
                 {% endif %}
                 <li class="send-message"></li>
             </div>
-            <hr>
-            <div class="chat-box">
+{#            <div class="ui divider"></div>#}
+
+            <div class="">
                 <form role="form" method="post" action="#" id="send">
-                    <div class="form-group">
+
                         {% csrf_token %}
-                        <input type="hidden" name="to" value="{{ active_user }}">
-                        <input class="form-control" type="text" name="msgcontent" placeholder="发送消息" autocomplete="off">
-                    </div>
+
+                            <div class="ui fluid action input">
+                                <input type="hidden" name="to" value="{{ active_user }}">
+
+                                <input type="text" name="msgcontent" placeholder="发送消息" autocomplete="off">
+                                <button type="submit" class="ui blue button">发送</button>
+                            </div>
+
                 </form>
             </div>
         </div>
@@ -57,12 +77,13 @@
 
 {% block javascript %}
     {{ block.super }}
-            <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
 
     <script type="text/javascript">
         const active_user = "{{ active_user }}";
         window.onload = $('.messages-list').scrollTop($('.messages-list')[0].scrollHeight);
     </script>
 
-    <script src="{% static 'js/chat.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/reconnecting-websocket.js' %}"></script>
+    <script src="{% static 'js/chat.js' %}"></script>
 {% endblock %}
