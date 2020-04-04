@@ -24,9 +24,9 @@ urlpatterns = [
     path("blogs/", include("sonsuz.blogs.urls", namespace="blogs")),
     path("quora/", include("sonsuz.quora.urls", namespace="quora")),
     path("chat/", include("sonsuz.chat.urls", namespace="chat")),
+    path("notifications/", include("sonsuz.notifications.urls", namespace="notifications")),
 
-
-    # 第三方路由
+                  # 第三方路由
     # url(r'mdeditor/', include('mdeditor.urls')),
     re_path(r'mdeditor/', include('mdeditor.urls')),
     re_path(r'^comments/', include('django_comments.urls')),

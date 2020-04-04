@@ -89,7 +89,8 @@ LOCAL_APPS = [
     "sonsuz.news.apps.NewsConfig",
     "sonsuz.blogs.apps.BlogsConfig",
     "sonsuz.quora.apps.QuoraConfig",
-    "sonsuz.chat.apps.ChatConfig"
+    "sonsuz.chat.apps.ChatConfig",
+    "sonsuz.notifications.apps.NotificationsConfig"
 
 
     # Your stuff: custom apps go here

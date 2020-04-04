@@ -14,5 +14,5 @@ urlpatterns = [
     path('post-reply/', views.post_reply, name='post_reply'),
     path('get-replies/', views.get_replies, name='get_replies'),
 
-    # path('update-interactions/', views.update_interactions, name='update_interactions'),
+    path('update-interactions/', views.update_interactions, name='update_interactions'),
 ]

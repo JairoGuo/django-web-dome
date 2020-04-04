@@ -3,7 +3,7 @@ $(function () {
     // 滚动条下拉到底
     function scrollConversationScreen() {
         $("input[name='msgcontent']").focus();
-        $('.messages-list').scrollTop($('.messages-list')[0].scrollHeight);
+        $('.messages-list').scrollTop($('.messages-list')[1].scrollHeight);
     }
 
     // AJAX POST发送消息

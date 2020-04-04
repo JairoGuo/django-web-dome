@@ -38,9 +38,6 @@
 <body>
 
 
-
-
-
 {# 手机端适应 #}
 <div class="ui vertical inverted sidebar menu">
     <div class="item">
@@ -120,102 +117,137 @@
 
 <div class="pusher">
     {% block bar %}
-    <div class="ui inverted vertical center aligned segment mini">
+        <div class="ui inverted vertical center aligned segment mini">
 
-        <div class="ui container">
-            <div class="ui large secondary inverted pointing  menu ">
-                <a class="toc item">
-                    <i class="sidebar icon"></i>
-                </a>
+            <div class="ui container">
+                <div class="ui large secondary inverted pointing  menu ">
+                    <a class="toc item">
+                        <i class="sidebar icon"></i>
+                    </a>
 
-                {#            <a class="item" href="{% url 'home' %}">sonsuz</a>#}
-                {#                <a class="header item" href="{% url 'home' %}">Sonsuz</a>#}
-                <a class="item" id="home" href="{% url 'home' %}">Home </a>
-                <a class="item" id="about" href="{% url 'about' %}">关于 </a>
-                <a class="item" id="news" href="{% url 'news:list' %}">资讯</a>
-                <a class="item" id="blogs" href="{% url 'blogs:list' %}">博客</a>
-                <a class="item" id="quora" href="{% url 'quora:all-questions' %}">问答</a>
-                <a class="item" id="chat" href="{% url 'chat:messages_list' %}">私信</a>
-                <div class="ui search item">
-                    <div class="ui icon input">
-                        <input class="prompt" type="text" placeholder="搜索">
-                        <i class="search icon"></i>
+                    {#            <a class="item" href="{% url 'home' %}">sonsuz</a>#}
+                    {#                <a class="header item" href="{% url 'home' %}">Sonsuz</a>#}
+                    <a class="item" id="home" href="{% url 'home' %}">Home </a>
+                    <a class="item" id="about" href="{% url 'about' %}">关于 </a>
+                    <a class="item" id="news" href="{% url 'news:list' %}">资讯</a>
+                    <a class="item" id="blogs" href="{% url 'blogs:list' %}">博客</a>
+                    <a class="item" id="quora" href="{% url 'quora:all-questions' %}">问答</a>
+                    <a class="item" id="chat" href="{% url 'chat:messages_list' %}">私信</a>
+                    <div class="ui search item">
+                        <div class="ui icon input">
+                            <input class="prompt" type="text" placeholder="搜索">
+                            <i class="search icon"></i>
+                        </div>
+                        <div class="results"></div>
                     </div>
-                    <div class="results"></div>
-                </div>
 
 
-                <div class="right item" id="pc-user-menu">
+                    <div class="right item" id="pc-user-menu">
 
 
-                    {% if request.user.is_authenticated %}
+                        {% if request.user.is_authenticated %}
 
 
-                        <div class="ui teal buttons" style="padding-right: 10px">
-                            <div class="ui button">创建</div>
-                            <div class="ui floating dropdown icon button  createbutton">
-                                <i class="dropdown icon"></i>
-                                <div class="menu">
-                                    <a class="item" onclick="addnews()"><i class="edit icon"></i> 写新闻</a>
-                                    <a class="item" href="{% url 'blogs:create' %}"><i class="delete icon"></i> 写博客</a>
-                                    <a class="item"><i class="hide icon"></i> 提问题</a>
-                                    <div class="ui divider"></div>
-                                    <a class="item" href="{% url "blogs:drafts" %}"><i class="hide icon"></i>草稿箱</a>
+                            <div class="ui teal buttons mini" style="padding-right: 10px">
+                                <div class="ui button">创建</div>
+                                <div class="ui floating dropdown icon button  createbutton">
+                                    <i class="dropdown icon"></i>
+                                    <div class="menu">
+                                        <a class="item" onclick="addnews()"><i class="edit icon"></i> 写新闻</a>
+                                        <a class="item" href="{% url 'blogs:create' %}"><i class="delete icon"></i> 写博客</a>
+                                        <a class="item"><i class="hide icon"></i> 提问题</a>
+                                        <div class="ui divider"></div>
+                                        <a class="item" href="{% url "blogs:drafts" %}"><i class="hide icon"></i>草稿箱</a>
 
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
 
-                        <div class=" ui dropdown userdropdown">
-                            {% thumbnail request.user.avatar "x25" as im %}
-                                <img class="ui avatar image" src="{{ im.url }}">
-                            {% empty %}
-                                <img class="ui avatar image" src="{% static "images/user.png" %}">
-                            {% endthumbnail %}
 
-                            <div class="menu">
-                                {% if user.name %}
-                                    <div class="header" href="">{{ user.name }}</div>
 
-                                {% else %}
-                                    <div class="header" href="">{{ user.username }}</div>
-                                {% endif %}
+                            <a class="ui icon dropdown" id="notifications"
+                               href="{% url 'notifications:latest_notifications' %}"
+                               style="margin-right: 10px; color: white"
+                               data-position="bottom center">
+                                <i class="bell outline icon"></i>
 
-                                <div class="ui divider"></div>
+{#                                <div class="floating ui red empty label circular mini"></div>#}
 
-                                <a class="item" href="{% url "news:news_manage" %}">
-                                    <i class="newspaper icon"></i><span>新闻管理</span>
-                                </a>
-                                <div class="ui divider"></div>
-                                <a class="item" href="{% url 'users:detail' request.user.username %}">
-                                    <i class="user icon"></i>个人中心</a>
-                                <div class="ui divider"></div>
-                                <a class="item">
-                                    <i class="question circle icon"></i>帮助
-                                </a>
-                                <a class="item" href="{% url 'account_logout' %}">
-                                    <i class="sign-out icon"></i>{% trans "Sign Out" %}
-                                </a>
+                            </a>
+                            <div class="ui special popup fluid">
+                                <div class="header">通知</div>
+
                             </div>
-                        </div>
 
-                    {% else %}
-                        {# URL provided by django-allauth/account/urls.py #}
-                        <a class="ui inverted button"
-                           href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
-                        &ThickSpace;
-                        <a class="ui inverted button"
-                           href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
-                    {% endif %}
+
+
+                            {#                            <a class="ui icon top left pointing dropdown "#}
+                            {#                               href="{% url 'notifications:latest_notifications' %}"#}
+                            {#                               style="padding-right: 10px; color: white"#}
+                            {#                               data-title="通知"#}
+                            {#                               id="notifications">#}
+                            {#                                <i class="bell outline icon"></i>#}
+                            {##}
+                            {#                                <div class="menu">#}
+                            {#                                    <div class="header">通知</div>#}
+                            {#                                    <div class="ui divider"></div>#}
+                            {##}
+                            {#                                    {% include "notifications/most_recent.html" %}#}
+                            {#                                </div>#}
+                            {#                            </a>#}
+
+
+
+                            <div class=" ui dropdown userdropdown">
+                                {% thumbnail request.user.avatar "x25" as im %}
+                                    <img class="ui avatar image" src="{{ im.url }}">
+                                {% empty %}
+                                    <img class="ui avatar image" src="{% static "images/user.png" %}">
+                                {% endthumbnail %}
+
+                                <div class="menu">
+                                    {% if user.name %}
+                                        <div class="header" href="">{{ user.name }}</div>
+
+                                    {% else %}
+                                        <div class="header" href="">{{ user.username }}</div>
+                                    {% endif %}
+
+                                    <div class="ui divider"></div>
+
+                                    <a class="item" href="{% url "news:news_manage" %}">
+                                        <i class="newspaper icon"></i><span>新闻管理</span>
+                                    </a>
+                                    <div class="ui divider"></div>
+                                    <a class="item" href="{% url 'users:detail' request.user.username %}">
+                                        <i class="user icon"></i>个人中心</a>
+                                    <div class="ui divider"></div>
+                                    <a class="item">
+                                        <i class="question circle icon"></i>帮助
+                                    </a>
+                                    <a class="item" href="{% url 'account_logout' %}">
+                                        <i class="sign-out icon"></i>{% trans "Sign Out" %}
+                                    </a>
+                                </div>
+                            </div>
+
+                        {% else %}
+                            {# URL provided by django-allauth/account/urls.py #}
+                            <a class="ui inverted button"
+                               href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
+                            &ThickSpace;
+                            <a class="ui inverted button"
+                               href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
+                        {% endif %}
+
+                    </div>
+
 
                 </div>
-
-
             </div>
-        </div>
 
-    </div>
+        </div>
     {% endblock %}
 
     <div class="ui container" style="padding-top: 15px">
@@ -252,7 +284,6 @@
     {% include "news/news_form_modal.html" %}
 
 
-
 {% endblock modal %}
 
 <!-- Le javascript
@@ -264,6 +295,7 @@
     {#    <script src="{% static 'js/popper.js' %}"></script>#}
     {#    <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>#}
     <script src="{% static 'semantic/semantic.min.js' %}"></script>
+    <script src="{% static 'js/reconnecting-websocket.js' %}"></script>
 
     <!-- Your stuff: Third-party javascript libraries go here -->
 
@@ -271,8 +303,10 @@
     <!-- place project specific Javascript in this file -->
     {% compress js %}
 
+        <script src="{% static 'js/reconnecting-websocket.js' %}"></script>
         <script src="{% static 'js/project.js' %}"></script>
         <script src="{% static 'js/news.js' %}"></script>
+        <script src="{% static 'js/notifications.js' %}"></script>
 
 
         <script>
@@ -303,14 +337,34 @@
                     .dropdown()
             ;
 
+            {#$('#notifications')#}
+            {#        .dropdown()#}
+            {#;#}
 
+            {#$('#notifications')#}
+            {#        .popup({#}
+            {#            inline: true,#}
+            {#            position: 'bottom center',#}
+            {#            on: 'click'#}
+            {#        })#}
+            {#;#}
+
+            {##}
+            {#$('#notifications')#}
+            {#        .popup({#}
+            {#            inline: true,#}
+            {#            on: "click",#}
+            {#            title: "通知"#}
+            {##}
+            {#        })#}
+            {#;#}
         </script>
 
         <script>
 
-        $('.err')
-  .modal()
-;
+            $('.err')
+                    .modal()
+            ;
         </script>
 
 

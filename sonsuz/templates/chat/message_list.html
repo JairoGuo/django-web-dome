@@ -6,7 +6,7 @@
 {% block css %}
     {{ block.super }}
     <link href="{% static 'css/chat.css' %}" rel="stylesheet">
-    <link href="{% static 'bootstrap/css/bootstrap.css' %}" rel="stylesheet">
+{#    <link href="{% static 'bootstrap/css/bootstrap.css' %}" rel="stylesheet">#}
 
 {% endblock css %}
 
@@ -15,8 +15,8 @@
     <div class="ui header">
         {{ request.user.get_profile_name }}的聊天记录
     </div>
-    <div class="ui grid container">
-        <div class="four wide column">
+    <div class="ui grid container internally celled ">
+        <div class="four wide column ">
 
             <div class="messages-list ui middle aligned selection animated list card"
                  style="background-color: #3D3D3D;">
@@ -24,7 +24,8 @@
                 {% for user in users_list %}
 
                     <a href="{% url 'chat:conversation_detail' user.username %}"
-                       class="item {% if active_user == user.username %} active {% endif %}">
+                       class="item {% if active_user == user.username %} active {% endif %}"
+                       style="{% if active_user == user.username %} background-color: #0d71bb; {% endif %}">
                         {% thumbnail user.avatar "x45" as im %}
                             <img class="ui avatar image" src="{{ im.url }}" alt="用户头像">
                         {% empty %}
@@ -77,13 +78,13 @@
 
 {% block javascript %}
     {{ block.super }}
-    <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+{#    <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>#}
 
     <script type="text/javascript">
         const active_user = "{{ active_user }}";
         window.onload = $('.messages-list').scrollTop($('.messages-list')[0].scrollHeight);
     </script>
 
-    <script src="{% static 'js/reconnecting-websocket.js' %}"></script>
+{#    <script src="{% static 'js/reconnecting-websocket.js' %}"></script>#}
     <script src="{% static 'js/chat.js' %}"></script>
 {% endblock %}

@@ -64,6 +64,7 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
         # form.instance.status = 'P'
         return super(ArticleCreateView, self).form_valid(form)
 
+
     # success_url = reverse_lazy('blogs:list')
 
 

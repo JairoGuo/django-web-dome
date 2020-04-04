@@ -1,15 +1,16 @@
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.db import models
 
 # Create your models here.
 import uuid
 
-# from asgiref.sync import async_to_sync
-# from channels.layers import get_channel_layer
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
 
-# from sonsuz.notifications.views import notification_handler
+from sonsuz.notifications.views import notification_handler
 
 User = get_user_model()
 # from users.models import User
@@ -51,7 +52,7 @@ class News(models.Model):
         else:
             self.likers.add(user)  # 如果用户没有点赞，那么就把他添加进来
             # 通知楼主
-            # notification_handler(user, self.user, 'L', self, id_value=str(self.uuid_id), key='social_update')
+            notification_handler(user, self.user, 'L', self, id_value=str(self.uuid_id), key='social_update')
 
     def get_parent(self):
         """返回自关联中的上级记录或者本身"""
@@ -80,7 +81,7 @@ class News(models.Model):
             parent=parent
         )
         # 通知楼主
-        # notification_handler(user, parent.user, 'R', parent, id_value=str(self.uuid_id), key='social_update')
+        notification_handler(user, parent.user, 'R', parent, id_value=str(self.uuid_id), key='social_update')
 
     def likers_count(self):
         """点赞数量"""
@@ -94,14 +95,14 @@ class News(models.Model):
         """评论数量"""
         return self.get_children().count()
 
-    # def save(self, *args, **kwargs):
-    #     super(News, self).save(*args, **kwargs)
-    #
-    #     if not self.reply:
-    #         channel_layer = get_channel_layer()
-    #         payload = {
-    #             "type": "receive",
-    #             "key": "additional_news",
-    #             "actor_name": self.user.username
-    #         }
-    #         async_to_sync(channel_layer.group_send)('notifications', payload)
+    def save(self, *args, **kwargs):
+        super(News, self).save(*args, **kwargs)
+
+        if not self.reply:
+            channel_layer = get_channel_layer()
+            payload = {
+                "type": "receive",
+                "key": "additional_news",
+                "actor_name": self.user.username
+            }
+            async_to_sync(channel_layer.group_send)('notifications', payload)

@@ -2,35 +2,57 @@
 
 
 {% ifequal message.sender.username request.user.username %}
-    <li class="media">
-        <div class="media-body" style="text-align: right">
-            <b class="mt-0 mb-1"><small>{{ message.created_at|date:'Y-m-d H:i:s' }} - </small>
-                <a href="{% url 'users:detail' message.sender.username %}">{{ message.sender.get_profile_name }}</a>
-            </b>
-            <div>
+    <li class="ui item">
+
+
+        <div class="right fixed content" style="text-align: right">
+
+            {#            <b class="ui middle aligned"><small>{{ message.created_at|date:'Y-m-d H:i:s' }} - </small>#}
+            {#                <a href="{% url 'users:detail' message.sender.username %}">{{ message.sender.get_profile_name }}</a>#}
+            {#            </b>#}
+            <div class="ui right pointing label teal" style="max-width: 70vh; word-wrap: break-word">
                 {{ message.message }}
             </div>
+
+
+
+            {% thumbnail message.sender.avatar "x45" as im %}
+                <img class="ui middle aligned " src="{{ im.url }}" alt="用户头像">
+            {% empty %}
+                <img class="ui middle aligned" src="{% static 'images/user.png' %}" height="45px" alt="没有头像"/>
+            {% endthumbnail %}
         </div>
-        {% thumbnail message.sender.avatar "x45" as im %}
-            <img class="ml-3" src="{{ im.url }}" alt="用户头像">
-        {% empty %}
-            <img class="ml-3" src="{% static 'images/user.png' %}" height="45px" alt="没有头像"/>
-        {% endthumbnail %}
+
+        {#        <div class="right floated" style="margin-right: 50px">#}
+        {#            {{ message.message }}#}
+        {#        </div>#}
+
     </li>
 {% else %}
-    <li>
-        {% thumbnail message.sender.avatar "x45" as im %}
-            <img class="picture" src="{{ im.url }}" alt="用户头像">
-        {% empty %}
-            <img class="picture" src="{% static 'images/user.png' %}" height="45px" alt="没有头像"/>
-        {% endthumbnail %}
-        <div>
-            <b>
-                <a href="{% url 'users:detail' message.sender.username %}">{{ message.sender.get_profile_name }}</a>
-            </b>
-            <small> - {{ message.created_at|date:'Y-m-d H:i:s' }}</small>
-            <br>
-            {{ message.message }}
+    <li class="ui item">
+
+        <div class="content">
+
+
+            {% thumbnail message.sender.avatar "x45" as im %}
+                <img class="ui middle aligned" src="{{ im.url }}" alt="用户头像">
+            {% empty %}
+                <img class="ui middle aligned" src="{% static 'images/user.png' %}" height="45px" alt="没有头像"/>
+            {% endthumbnail %}
+
+            {#            <b>#}
+            {#                <a href="{% url 'users:detail' message.sender.username %}">{{ message.sender.get_profile_name }}</a>#}
+            {#            </b>#}
+            {#            <small> - {{ message.created_at|date:'Y-m-d H:i:s' }}</small>#}
+            <div class="ui left pointing label blue">
+                {{ message.message }}
+            </div>
+
+
         </div>
+
+
     </li>
+
+
 {% endifequal %}

@@ -13,7 +13,11 @@
 
 
     <div class="ui padded grid fluid container">
+
         <div class="eleven wide column " id="main-news">
+            <div class="ui visible message" id="news-update-message" style="display: none">
+                <p>您有新的资讯</p>
+            </div>
             <div class="ui divided  items newcontent">
                 {% for news in news_list %}
 
