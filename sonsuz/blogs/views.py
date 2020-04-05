@@ -9,16 +9,14 @@ from django.urls import reverse, reverse_lazy
 # from django.utils.decorators import method_decorator
 # from django.views.decorators.cache import cache_page
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, RedirectView
-#
-# from django_comments.signals import comment_was_posted
-#
+from django_comments.signals import comment_was_posted
 from sonsuz.blogs.forms import ArticleForm
 from sonsuz.blogs.models import Article, ArticleCategory
+from sonsuz.notifications.views import notification_handler
 
 from sonsuz.utils.utils import AuthorRequiredMixin
-# from mydjango.notifications.views import notification_handler
-#
-#
+
+
 class ArticleListView(ListView):
     """已发布的文章列表"""
     model = Article
@@ -105,12 +103,12 @@ class ArticleUpdateView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
 
 
 
-# def comment_notify(**kwargs):
-#     """文章有评论时通知作者"""
-#     actor = kwargs['request'].user
-#     action_object = kwargs['comment'].content_object
+def comment_notify(**kwargs):
+    """文章有评论时通知作者"""
+    actor = kwargs['request'].user
+    action_object = kwargs['comment'].content_object
 
-#     notification_handler(actor, action_object.user, 'C', action_object)
+    notification_handler(actor, action_object.user, 'C', action_object)
 
 # # 观察者模式： 订阅[列表] + 通知（同步）
-# comment_was_posted.connect(receiver=comment_notify)
+comment_was_posted.connect(receiver=comment_notify)
