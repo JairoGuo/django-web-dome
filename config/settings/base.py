@@ -1,8 +1,10 @@
 """
 Base settings to build other settings files upon.
 """
+import os
 
 import environ
+
 
 ROOT_DIR = (
     environ.Path(__file__) - 3
@@ -65,7 +67,7 @@ DJANGO_APPS = [
     "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "django.contrib.humanize", # Handy template tags
+    "django.contrib.humanize",  # Handy template tags
     "django.contrib.admin",
     "django.forms",
 ]
@@ -81,7 +83,8 @@ THIRD_PARTY_APPS = [
     "mdeditor",
     "django_comments",
     "markdownx",
-    "channels"
+    "channels",
+    "haystack"
 ]
 
 LOCAL_APPS = [
@@ -90,8 +93,8 @@ LOCAL_APPS = [
     "sonsuz.blogs.apps.BlogsConfig",
     "sonsuz.quora.apps.QuoraConfig",
     "sonsuz.chat.apps.ChatConfig",
-    "sonsuz.notifications.apps.NotificationsConfig"
-
+    "sonsuz.notifications.apps.NotificationsConfig",
+    "sonsuz.search.apps.SearchConfig"
 
     # Your stuff: custom apps go here
 ]
@@ -258,7 +261,7 @@ LOGGING = {
     "formatters": {
         "verbose": {
             "format": "%(levelname)s %(asctime)s %(module)s "
-            "%(process)d %(thread)d %(message)s"
+                      "%(process)d %(thread)d %(message)s"
         }
     },
     "handlers": {
@@ -358,3 +361,26 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+# HAYSTACK_CONNECTIONS = {
+#     'default': {
+#         # 使用的Elasticsearch搜索引擎
+#         'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+#         # Elasticsearch连接的地址
+#         'URL': 'http://127.0.0.1:9200/',
+#         # 默认的索引名
+#         'INDEX_NAME': 'sonsuz',
+#     },
+# }
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
+    },
+}
+
+
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 20  # 分页
+
+# 实时信号量处理器，模型类中数据增加、更新、删除时自动更新索引
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'

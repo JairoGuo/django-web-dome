@@ -133,13 +133,18 @@
                     <a class="item" id="blogs" href="{% url 'blogs:list' %}">博客</a>
                     <a class="item" id="quora" href="{% url 'quora:all-questions' %}">问答</a>
                     <a class="item" id="chat" href="{% url 'chat:messages_list' %}">私信</a>
-                    <div class="ui search item">
-                        <div class="ui icon input">
-                            <input class="prompt" type="text" placeholder="搜索">
+
+
+                    <div class="item">
+                        <form class="ui action input" action="{% url "haystack_search" %}">
+                        <input type="text" name="q" placeholder="搜索...">
+                        <button class="ui icon button" type="submit">
                             <i class="search icon"></i>
-                        </div>
-                        <div class="results"></div>
+                        </button>
+                        </form>
+
                     </div>
+
 
 
                     <div class="right item" id="pc-user-menu">
@@ -172,7 +177,7 @@
                                data-position="bottom center">
                                 <i class="bell outline icon"></i>
 
-{#                                <div class="floating ui red empty label circular mini"></div>#}
+                                {#                                <div class="floating ui red empty label circular mini"></div>#}
 
                             </a>
                             <div class="ui special popup fluid">
@@ -305,7 +310,7 @@
 
         <script src="{% static 'js/reconnecting-websocket.js' %}"></script>
         <script src="{% static 'js/project.js' %}"></script>
-{#        <script src="{% static 'js/news.js' %}"></script>#}
+        {#        <script src="{% static 'js/news.js' %}"></script>#}
         <script src="{% static 'js/notifications.js' %}"></script>
 
 

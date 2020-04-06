@@ -31,6 +31,7 @@ urlpatterns = [
     re_path(r'mdeditor/', include('mdeditor.urls')),
     re_path(r'^comments/', include('django_comments.urls')),
     re_path(r'^markdownx/', include('markdownx.urls')),
+    path('search/', include('haystack.urls')),
 
                   # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
