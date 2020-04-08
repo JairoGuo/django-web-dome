@@ -84,7 +84,8 @@ THIRD_PARTY_APPS = [
     "django_comments",
     "markdownx",
     "channels",
-    "haystack"
+    "haystack",
+    "djcelery_email"
 ]
 
 LOCAL_APPS = [
@@ -316,7 +317,12 @@ SOCIALACCOUNT_ADAPTER = "sonsuz.users.adapters.SocialAccountAdapter"
 # https://django-compressor.readthedocs.io/en/latest/quickstart/#installation
 INSTALLED_APPS += ["compressor"]
 STATICFILES_FINDERS += ["compressor.finders.CompressorFinder"]
-
+# https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_ENABLED
+COMPRESS_ENABLED = env.bool("COMPRESS_ENABLED", default=True)
+# https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_STORAGE
+# COMPRESS_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+# https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_URL
+COMPRESS_URL = STATIC_URL  # noqa F405
 # Your stuff...
 # ------------------------------------------------------------------------------
 MDEDITOR_CONFIGS = {
@@ -374,7 +380,7 @@ CHANNEL_LAYERS = {
 # }
 HAYSTACK_CONNECTIONS = {
     'default': {
-        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'ENGINE': 'haystack.backends.whoosh_cn_backend.WhooshEngine',
         'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
     },
 }

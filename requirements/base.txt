@@ -34,6 +34,7 @@ django-haystack
 elasticsearch
 whoosh
 jieba
+django-celery-email
 
 
 

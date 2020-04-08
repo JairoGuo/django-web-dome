@@ -5,6 +5,10 @@ from django.views.generic import DetailView, RedirectView, UpdateView
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 
+from sonsuz.blogs.models import Article
+from sonsuz.news.models import News
+from sonsuz.quora.models import Question, Answer
+
 User = get_user_model()
 
 
@@ -37,8 +41,46 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
         )
         return super().form_valid(form)
 
-
 user_update_view = UserUpdateView.as_view()
+
+class UserArticlesDetailView(UserDetailView):
+    def get_context_data(self, **kwargs):
+        context = super(UserArticlesDetailView, self).get_context_data()
+        context["articles"] = Article.objects.get_by_user(self.get_object())
+        context['active'] = 'articles'
+        return context
+
+
+class UserNewsDetailView(UserDetailView):
+    def get_context_data(self, **kwargs):
+        context = super(UserNewsDetailView, self).get_context_data()
+        context["newses"] = News.objects.filter(user=self.get_object(), reply=False).order_by('-updated_at')
+        context['active'] = 'news'
+        return context
+
+
+class UserQuestionsDetailView(UserDetailView):
+    def get_context_data(self, **kwargs):
+        context = super(UserQuestionsDetailView, self).get_context_data()
+        context["questions"] = Question.objects.get_questions_by_user(self.get_object())
+        context['active'] = 'questions'
+        return context
+
+
+class UserAnswersDetailView(UserDetailView):
+    def get_context_data(self, **kwargs):
+        context = super(UserAnswersDetailView, self).get_context_data()
+        context["answers"] = Answer.objects.filter(user=self.get_object()).order_by('-updated_at')
+        context['active'] = 'answers'
+        return context
+
+
+user_articles_detail_view = UserArticlesDetailView.as_view()
+user_news_detail_view = UserNewsDetailView.as_view()
+user_questions_detail_view = UserQuestionsDetailView.as_view()
+user_answers_detail_view = UserAnswersDetailView.as_view()
+
+
 
 
 class UserRedirectView(LoginRequiredMixin, RedirectView):
